@@ -4,7 +4,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using PRJ666_G7_Project.Data;
+//using PRJ666_G7_Project.Data;
 
 namespace PRJ666_G7_Project.Models
 {
@@ -27,7 +27,7 @@ namespace PRJ666_G7_Project.Models
         { }
 
         // Add DbSet<TEntity> properties here
-        public DbSet<RoleClaim> RoleClaims { get; set; }
+        /*public DbSet<RoleClaim> RoleClaims { get; set; }
 
         public DbSet<Genre> Genres { get; set; }
 
@@ -35,7 +35,7 @@ namespace PRJ666_G7_Project.Models
 
         public DbSet<Album> Albums { get; set; }
 
-        public DbSet<Track> Tracks { get; set; }
+        public DbSet<Track> Tracks { get; set; }*/
 
 
         // Turn OFF cascade delete, which is (unfortunately) the default setting
