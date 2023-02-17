@@ -1,7 +1,7 @@
 ﻿
-BEFORE running this app for the first time...
+Project: Work Schedule Management Tool
 
-Add your own design model classes in the Data Folder.
-
-Then, add DbSet<TEntity> properties in the 
-IdentityModels.cs source code file.
+Group 7
+Members: 
+  - Darius Seifert Booth
+  - Denys Syniavskyi
