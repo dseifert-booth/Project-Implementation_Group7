@@ -177,6 +177,9 @@
     <Compile Include="Controllers\LoadDataController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\Manager.cs" />
+    <Compile Include="Data\RoleClaim.cs" />
+    <Compile Include="Data\Shift.cs" />
+    <Compile Include="Data\Task.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -187,6 +190,10 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\DBCustomStore.mdf" />
+    <Content Include="App_Data\DBCustomStore_log.ldf">
+      <DependentUpon>DBCustomStore.mdf</DependentUpon>
+    </Content>
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -247,10 +254,7 @@
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Upload.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-    <Folder Include="Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
