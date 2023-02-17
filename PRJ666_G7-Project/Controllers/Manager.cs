@@ -89,7 +89,7 @@ namespace PRJ666_G7_Project.Controllers
 
         #region Role Claims
 
-        public List<string> RoleClaimGetAllStrings()
+        public List<String> RoleClaimGetAllStrings()
         {
             return ds.RoleClaims.OrderBy(r => r.Name).Select(r => r.Name).ToList();
         }
@@ -115,17 +115,17 @@ namespace PRJ666_G7_Project.Controllers
             if (ds.RoleClaims.Count() == 0)
             {
                 // Add role claims here
-                ds.RoleClaims.Add(new RoleClaim { Name = "Clerk" });
-                ds.RoleClaims.Add(new RoleClaim { Name = "Coordinator" });
-                ds.RoleClaims.Add(new RoleClaim { Name = "Executive" });
-                ds.RoleClaims.Add(new RoleClaim { Name = "Staff" });
+                ds.RoleClaims.Add(new RoleClaim { Name = "Super Admin", AuthLevel = 4 });
+                ds.RoleClaims.Add(new RoleClaim { Name = "Administrator", AuthLevel = 3 });
+                ds.RoleClaims.Add(new RoleClaim { Name = "Manager", AuthLevel = 2 });
+                ds.RoleClaims.Add(new RoleClaim { Name = "Employee", AuthLevel = 1 });
 
                 ds.SaveChanges();
                 done = true;
             }
 
             // *** Genres ***
-            if (ds.Genres.Count() == 0)
+            /*if (ds.Genres.Count() == 0)
             {
                 // Add genres here
                 ds.Genres.Add(new Genre { Name = "Alternative" });
@@ -141,10 +141,10 @@ namespace PRJ666_G7_Project.Controllers
 
                 ds.SaveChanges();
                 done = true;
-            }
+            }*/
 
             // *** Artists ***
-            if (ds.Artists.Count() == 0)
+            /*if (ds.Artists.Count() == 0)
             {
                 // Add artists here
 
@@ -178,10 +178,10 @@ namespace PRJ666_G7_Project.Controllers
 
                 ds.SaveChanges();
                 done = true;
-            }
+            }*/
 
             // *** Albums ***
-            if (ds.Albums.Count() == 0)
+            /*if (ds.Albums.Count() == 0)
             {
                 // Add albums here
 
@@ -210,10 +210,10 @@ namespace PRJ666_G7_Project.Controllers
 
                 ds.SaveChanges();
                 done = true;
-            }
+            }*/
 
             // *** Tracks ***
-            if (ds.Tracks.Count() == 0)
+            /*if (ds.Tracks.Count() == 0)
             {
                 // Add tracks
 
@@ -315,7 +315,7 @@ namespace PRJ666_G7_Project.Controllers
 
                 ds.SaveChanges();
                 done = true;
-            }
+            }*/
 
             return done;
         }
@@ -330,29 +330,29 @@ namespace PRJ666_G7_Project.Controllers
                 }
                 ds.SaveChanges();
 
-                foreach (var e in ds.Tracks)
+                /*foreach (var e in ds.Tracks)
                 {
                     ds.Entry(e).State = System.Data.Entity.EntityState.Deleted;
                 }
-                ds.SaveChanges();
+                ds.SaveChanges();*/
 
-                foreach (var e in ds.Albums)
+                /*foreach (var e in ds.Albums)
                 {
                     ds.Entry(e).State = System.Data.Entity.EntityState.Deleted;
                 }
-                ds.SaveChanges();
+                ds.SaveChanges();*/
 
-                foreach (var e in ds.Artists)
+                /*foreach (var e in ds.Artists)
                 {
                     ds.Entry(e).State = System.Data.Entity.EntityState.Deleted;
                 }
-                ds.SaveChanges();
+                ds.SaveChanges();*/
 
-                foreach (var e in ds.Genres)
+                /*foreach (var e in ds.Genres)
                 {
                     ds.Entry(e).State = System.Data.Entity.EntityState.Deleted;
                 }
-                ds.SaveChanges();
+                ds.SaveChanges();*/
 
                 return true;
             }
@@ -417,8 +417,15 @@ namespace PRJ666_G7_Project.Controllers
                 Surname = sn;
 
                 IsAuthenticated = true;
+
+                
+                isEmployee = user.HasClaim(ClaimTypes.Role, "Employee");
+                isManager = user.HasClaim(ClaimTypes.Role, "Manager");
+                IsAdmin = user.HasClaim(ClaimTypes.Role, "Administrator");
+                IsSuperAdmin = user.HasClaim(ClaimTypes.Role, "Super Admin");
+
                 // You can change the string value in your app to match your app domain logic
-                IsAdmin = user.HasClaim(ClaimTypes.Role, "Admin") ? true : false;
+                //IsAdmin = user.HasClaim(ClaimTypes.Role, "Admin") ? true : false;
             }
             else
             {
@@ -427,7 +434,10 @@ namespace PRJ666_G7_Project.Controllers
                 GivenName = "Unauthenticated";
                 Surname = "Anonymous";
                 IsAuthenticated = false;
+                isEmployee = false;
+                isManager = false;
                 IsAdmin = false;
+                IsSuperAdmin = false;
             }
 
             // Compose the nicely-formatted full names
@@ -449,7 +459,13 @@ namespace PRJ666_G7_Project.Controllers
 
         public bool IsAuthenticated { get; private set; }
 
+        public bool isEmployee { get; private set; }
+
+        public bool isManager { get; private set; }
+
         public bool IsAdmin { get; private set; }
+
+        public bool IsSuperAdmin { get; private set; }
 
         public bool HasRoleClaim(string value)
         {

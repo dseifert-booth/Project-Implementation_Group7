@@ -246,6 +246,8 @@ namespace PRJ666_G7_Project.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
+            
+
             // Claims-aware "Register" method to display an HTML Form
             // Make sure you study the Views/Account/Register.cshtml view code
             // It includes new input elements to gather name and claim data
@@ -254,11 +256,13 @@ namespace PRJ666_G7_Project.Controllers
             // However, in a real-world in-production app, you would likely maintain
             //   a valid list of custom claims in persistent storage somewhere
             Manager m = new Manager();
+            
             var roles = m.RoleClaimGetAllStrings();
 
             // Define a register form
             var form = new RegisterViewModelForm();
             form.RoleList = new MultiSelectList(roles);
+            form.UserType = m.User;
 
             return View(form);
         }
