@@ -4,7 +4,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-//using PRJ666_G7_Project.Data;
+using PRJ666_G7_Project.Data;
 
 namespace PRJ666_G7_Project.Models
 {
@@ -27,9 +27,9 @@ namespace PRJ666_G7_Project.Models
         { }
 
         // Add DbSet<TEntity> properties here
-        /*public DbSet<RoleClaim> RoleClaims { get; set; }
+        public DbSet<RoleClaim> RoleClaims { get; set; }
 
-        public DbSet<Genre> Genres { get; set; }
+        /*public DbSet<Genre> Genres { get; set; }
 
         public DbSet<Artist> Artists { get; set; }
 
