@@ -46,14 +46,47 @@
     <div class="form-group">
         @Html.LabelFor(m => m.RoleList, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @{ 
+            @{
                 foreach (var item in Model.RoleList)
                 {
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" name="Roles" checked="@item.Selected" value="@item.Text" />@item.Text
-                        </label>
-                    </div>
+                    if (Model.UserType.IsSuperAdmin)
+                    {
+                        if (item.Text != "Super Admin")
+                        {
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="Roles" checked="@item.Selected" value="@item.Text" />@item.Text
+                                </label>
+                            </div>
+                        }
+                    }
+                    else if (Model.UserType.IsAdmin)
+                    {
+                        if (item.Text != "Super Admin" || item.Text != "Administrator")
+                        {
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="Roles" checked="@item.Selected" value="@item.Text" />@item.Text
+                                </label>
+                            </div>
+                        }
+                    }
+                    else if (Model.UserType.isManager)
+                    {
+                        if (item.Text == "Employee")
+                        {
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="Roles" checked="@item.Selected" value="@item.Text" />@item.Text
+                                </label>
+                            </div>
+                        }
+                    }
+                    @*<div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="Roles" checked="@item.Selected" value="@item.Text" />@item.Text
+                    </label>
+                </div>*@
                 }
             }
         </div>

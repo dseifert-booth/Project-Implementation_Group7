@@ -29,6 +29,10 @@ namespace PRJ666_G7_Project.Models
         // Add DbSet<TEntity> properties here
         public DbSet<RoleClaim> RoleClaims { get; set; }
 
+        public DbSet<Shift> Shifts { get; set; }
+
+        public DbSet<Data.Task> Tasks { get; set; }
+
         /*public DbSet<Genre> Genres { get; set; }
 
         public DbSet<Artist> Artists { get; set; }

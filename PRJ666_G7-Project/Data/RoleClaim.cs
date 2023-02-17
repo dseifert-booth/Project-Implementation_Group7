@@ -12,5 +12,8 @@ namespace PRJ666_G7_Project.Data
 
         [Required, StringLength(100)]
         public string Name { get; set; }
+
+        [Required]
+        public int AuthLevel { get; set; }
     }
 }
