@@ -11,8 +11,10 @@ namespace PRJ666_G7_Project.Data
         [Key]
         public int Id { get; set; }
 
+        [Required]
         public DateTime ShiftStart { get; set; }
 
+        [Required]
         public DateTime ShiftEnd { get; set; }
 
         public DateTime ClockInTime { get; set; }
