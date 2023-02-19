@@ -18,5 +18,7 @@ namespace PRJ666_G7_Project.Data
         public string Description { get; set; }
 
         public bool Complete { get; set; }
+
+        public ICollection<Shift> Shift { get; set; }
     }
 }

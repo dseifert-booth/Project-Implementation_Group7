@@ -202,6 +202,66 @@
     <Compile Include="Migrations\202302190310007_MigrationEmployeeRoleClaim2.Designer.cs">
       <DependentUpon>202302190310007_MigrationEmployeeRoleClaim2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202302190324106_Migration.cs" />
+    <Compile Include="Migrations\202302190324106_Migration.Designer.cs">
+      <DependentUpon>202302190324106_Migration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202302190326549_Migration1.cs" />
+    <Compile Include="Migrations\202302190326549_Migration1.Designer.cs">
+      <DependentUpon>202302190326549_Migration1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202302190334260_MigrationRedoDatabase.cs" />
+    <Compile Include="Migrations\202302190334260_MigrationRedoDatabase.Designer.cs">
+      <DependentUpon>202302190334260_MigrationRedoDatabase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202302190335193_MigrationReAddShiftTask.cs" />
+    <Compile Include="Migrations\202302190335193_MigrationReAddShiftTask.Designer.cs">
+      <DependentUpon>202302190335193_MigrationReAddShiftTask.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202302190341332_MigrationPlease.cs" />
+    <Compile Include="Migrations\202302190341332_MigrationPlease.Designer.cs">
+      <DependentUpon>202302190341332_MigrationPlease.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202302190344387_MigrationAAAAAAA.cs" />
+    <Compile Include="Migrations\202302190344387_MigrationAAAAAAA.Designer.cs">
+      <DependentUpon>202302190344387_MigrationAAAAAAA.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202302190347031_MigrationAAAAAAAAAA.cs" />
+    <Compile Include="Migrations\202302190347031_MigrationAAAAAAAAAA.Designer.cs">
+      <DependentUpon>202302190347031_MigrationAAAAAAAAAA.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202302190349121_MigrationAAAAAAAAAAAAAAAGGGHH.cs" />
+    <Compile Include="Migrations\202302190349121_MigrationAAAAAAAAAAAAAAAGGGHH.Designer.cs">
+      <DependentUpon>202302190349121_MigrationAAAAAAAAAAAAAAAGGGHH.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202302190350508_MigrationAAAAAAAAAAAAAAAGGGHHhhh.cs" />
+    <Compile Include="Migrations\202302190350508_MigrationAAAAAAAAAAAAAAAGGGHHhhh.Designer.cs">
+      <DependentUpon>202302190350508_MigrationAAAAAAAAAAAAAAAGGGHHhhh.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202302190353194_MigrationAAAAAAAAAAAAAAAGGGHHhhhhhh.cs" />
+    <Compile Include="Migrations\202302190353194_MigrationAAAAAAAAAAAAAAAGGGHHhhhhhh.Designer.cs">
+      <DependentUpon>202302190353194_MigrationAAAAAAAAAAAAAAAGGGHHhhhhhh.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202302190357524_MigrationAAAAAAAAAAAAAAAGGGHHhhhhhh1.cs" />
+    <Compile Include="Migrations\202302190357524_MigrationAAAAAAAAAAAAAAAGGGHHhhhhhh1.Designer.cs">
+      <DependentUpon>202302190357524_MigrationAAAAAAAAAAAAAAAGGGHHhhhhhh1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202302190421163_MigrationAAAAAAAAAAAAAAAGGGHHhhhhhhasdasdasd.cs" />
+    <Compile Include="Migrations\202302190421163_MigrationAAAAAAAAAAAAAAAGGGHHhhhhhhasdasdasd.Designer.cs">
+      <DependentUpon>202302190421163_MigrationAAAAAAAAAAAAAAAGGGHHhhhhhhasdasdasd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202302190427008_Migrationpina.cs" />
+    <Compile Include="Migrations\202302190427008_Migrationpina.Designer.cs">
+      <DependentUpon>202302190427008_Migrationpina.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202302190432247_Migrationpain.cs" />
+    <Compile Include="Migrations\202302190432247_Migrationpain.Designer.cs">
+      <DependentUpon>202302190432247_Migrationpain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202302190432499_Migrationpain2.cs" />
+    <Compile Include="Migrations\202302190432499_Migrationpain2.Designer.cs">
+      <DependentUpon>202302190432499_Migrationpain2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\EmployeeViewModels.cs" />
@@ -312,6 +372,51 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202302190310007_MigrationEmployeeRoleClaim2.resx">
       <DependentUpon>202302190310007_MigrationEmployeeRoleClaim2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202302190324106_Migration.resx">
+      <DependentUpon>202302190324106_Migration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202302190326549_Migration1.resx">
+      <DependentUpon>202302190326549_Migration1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202302190334260_MigrationRedoDatabase.resx">
+      <DependentUpon>202302190334260_MigrationRedoDatabase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202302190335193_MigrationReAddShiftTask.resx">
+      <DependentUpon>202302190335193_MigrationReAddShiftTask.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202302190341332_MigrationPlease.resx">
+      <DependentUpon>202302190341332_MigrationPlease.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202302190344387_MigrationAAAAAAA.resx">
+      <DependentUpon>202302190344387_MigrationAAAAAAA.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202302190347031_MigrationAAAAAAAAAA.resx">
+      <DependentUpon>202302190347031_MigrationAAAAAAAAAA.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202302190349121_MigrationAAAAAAAAAAAAAAAGGGHH.resx">
+      <DependentUpon>202302190349121_MigrationAAAAAAAAAAAAAAAGGGHH.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202302190350508_MigrationAAAAAAAAAAAAAAAGGGHHhhh.resx">
+      <DependentUpon>202302190350508_MigrationAAAAAAAAAAAAAAAGGGHHhhh.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202302190353194_MigrationAAAAAAAAAAAAAAAGGGHHhhhhhh.resx">
+      <DependentUpon>202302190353194_MigrationAAAAAAAAAAAAAAAGGGHHhhhhhh.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202302190357524_MigrationAAAAAAAAAAAAAAAGGGHHhhhhhh1.resx">
+      <DependentUpon>202302190357524_MigrationAAAAAAAAAAAAAAAGGGHHhhhhhh1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202302190421163_MigrationAAAAAAAAAAAAAAAGGGHHhhhhhhasdasdasd.resx">
+      <DependentUpon>202302190421163_MigrationAAAAAAAAAAAAAAAGGGHHhhhhhhasdasdasd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202302190427008_Migrationpina.resx">
+      <DependentUpon>202302190427008_Migrationpina.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202302190432247_Migrationpain.resx">
+      <DependentUpon>202302190432247_Migrationpain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202302190432499_Migrationpain2.resx">
+      <DependentUpon>202302190432499_Migrationpain2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
