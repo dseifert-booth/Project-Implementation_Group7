@@ -37,6 +37,7 @@ namespace PRJ666_G7_Project.Controllers
             }
         }
 
+        [Authorize(Roles = "Manager,Administrator,Super Admin")]
         // GET: Shifts/Create
         public ActionResult Create()
         {
@@ -57,6 +58,7 @@ namespace PRJ666_G7_Project.Controllers
             return View(form);
         }
 
+        [Authorize(Roles = "Manager,Administrator,Super Admin")]
         // POST: Shifts/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -83,6 +85,7 @@ namespace PRJ666_G7_Project.Controllers
             }
         }
 
+        [Authorize(Roles = "Employee,Manager,Administrator,Super Admin")]
         // GET: Shifts/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -112,9 +115,10 @@ namespace PRJ666_G7_Project.Controllers
                 else
                 {
                     formObj.TaskList = new MultiSelectList
-                    (items: obj.Tasks,
+                    (items: m.TaskGetAll(),
                     dataValueField: "Id",
-                    dataTextField: "Name"
+                    dataTextField: "Name",
+                    selectedValues: obj.Tasks.Select(t => t.Id)
                     );
                 }
 
@@ -122,6 +126,7 @@ namespace PRJ666_G7_Project.Controllers
             }
         }
 
+        [Authorize(Roles = "Employee,Manager,Administrator,Super Admin")]
         // POST: Shifts/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -151,32 +156,30 @@ namespace PRJ666_G7_Project.Controllers
             }
         }
 
+        [Authorize(Roles = "Manager,Administrator,Super Admin")]
         // GET: Shifts/Delete/5
         public ActionResult Delete(int? id)
         {
-            if (id == null)
+            var itemToDelete = m.ShiftGetByIdWithDetail(id.GetValueOrDefault());
+
+            if (itemToDelete == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Index");
             }
-            Shift shift = db.Shifts.Find(id);
-            if (shift == null)
-            {
-                return HttpNotFound();
-            }
-            return View(shift);
+            else return View(itemToDelete);
         }
 
+        [Authorize(Roles = "Manager,Administrator,Super Admin")]
         // POST: Shifts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(int? id)
         {
-            Shift shift = db.Shifts.Find(id);
-            db.Shifts.Remove(shift);
-            db.SaveChanges();
+            var result = m.ShiftDelete(id.GetValueOrDefault());
+
             return RedirectToAction("Index");
         }
-
+/*
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -184,6 +187,6 @@ namespace PRJ666_G7_Project.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
-        }
+        }*/
     }
 }

@@ -176,13 +176,18 @@ namespace PRJ666_G7_Project.Controllers
                 if (isSuperAdmin || isAdmin || isManager)
                 {
 
-                    foreach (var task in obj.Tasks)
+                    ICollection<Task> tasks = new HashSet<Task>();
+
+                    foreach (var taskId in shift.TaskIds)
                     {
-                        foreach (var taskId in shift.TaskIds) if (task.Id == taskId) obj.Tasks.Remove(task);
+                        var task = ds.Tasks.Find(taskId);
+                        tasks.Add(task);
                     }
 
-                    obj.ShiftStart = shift.ShiftStart;
-                    obj.ShiftEnd = shift.ShiftEnd;
+                    obj.Tasks = tasks;
+
+                    if (shift.ShiftStart != null) obj.ShiftStart = (DateTime)shift.ShiftStart;
+                    if (shift.ShiftEnd != null) obj.ShiftEnd = (DateTime)shift.ShiftEnd;
                 } 
                 else if (isEmployee)
                 {
@@ -211,7 +216,23 @@ namespace PRJ666_G7_Project.Controllers
 
                 return mapper.Map<Shift, ShiftWithDetailViewModel>(obj);
             }
+        }
 
+        public bool ShiftDelete(int id)
+        {
+            var itemToDelete = ds.Shifts.Find(id);
+
+            if (itemToDelete == null)
+            {
+                return false;
+            }
+            else
+            {
+                ds.Shifts.Remove(itemToDelete);
+                ds.SaveChanges();
+
+                return true;
+            }
         }
 
         public IEnumerable<TaskBaseViewModel> TaskGetAll()

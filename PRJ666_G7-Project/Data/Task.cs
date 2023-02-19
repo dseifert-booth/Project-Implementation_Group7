@@ -8,6 +8,12 @@ namespace PRJ666_G7_Project.Data
 {
     public class Task
     {
+
+        public Task()
+        {
+            Shifts = new HashSet<Shift>();
+        }
+
         [Key]
         public int Id { get; set; }
 
@@ -19,6 +25,6 @@ namespace PRJ666_G7_Project.Data
 
         public bool Complete { get; set; }
 
-        public ICollection<Shift> Shift { get; set; }
+        public ICollection<Shift> Shifts { get; set; }
     }
 }

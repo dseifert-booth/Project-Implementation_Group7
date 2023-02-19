@@ -265,6 +265,10 @@
     <Compile Include="Migrations\202302190432499_Migrationpain2.Designer.cs">
       <DependentUpon>202302190432499_Migrationpain2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202302191943307_migrationShiftDelete.cs" />
+    <Compile Include="Migrations\202302191943307_migrationShiftDelete.Designer.cs">
+      <DependentUpon>202302191943307_migrationShiftDelete.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\EmployeeViewModels.cs" />
@@ -340,7 +344,6 @@
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Upload.cshtml" />
     <Content Include="Views\Shifts\Create.cshtml" />
-    <Content Include="Views\Shifts\Delete.cshtml" />
     <Content Include="Views\Shifts\Details.cshtml" />
     <Content Include="Views\Shifts\Index.cshtml" />
     <Content Include="Views\Tasks\Create.cshtml" />
@@ -348,6 +351,7 @@
     <Content Include="Views\Tasks\Details.cshtml" />
     <Content Include="Views\Tasks\Index.cshtml" />
     <Content Include="Views\Shifts\Edit.cshtml" />
+    <Content Include="Views\Shifts\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -419,6 +423,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202302190432499_Migrationpain2.resx">
       <DependentUpon>202302190432499_Migrationpain2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202302191943307_migrationShiftDelete.resx">
+      <DependentUpon>202302191943307_migrationShiftDelete.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

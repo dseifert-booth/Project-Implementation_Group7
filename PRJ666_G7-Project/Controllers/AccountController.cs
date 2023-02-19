@@ -61,7 +61,6 @@ namespace PRJ666_G7_Project.Controllers
         public ActionResult Index()
         {
             // Users, names only
-
             // Get all users
             var allUsers = UserManager.Users;
 

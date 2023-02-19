@@ -77,10 +77,10 @@ namespace PRJ666_G7_Project.Models
         public int Id { get; set; }
 
         [Display(Name = "Start time")]
-        public DateTime ShiftStart { get; set; }
+        public DateTime? ShiftStart { get; set; }
 
         [Display(Name = "End time")]
-        public DateTime ShiftEnd { get; set; }
+        public DateTime? ShiftEnd { get; set; }
 
         [Display(Name = "Employee clock-in time")]
         public DateTime? ClockInTime { get; set; }
@@ -101,9 +101,9 @@ namespace PRJ666_G7_Project.Models
         [Key]
         public int Id { get; set; }
 
-        public DateTime ShiftStart { get; set; }
+        public DateTime? ShiftStart { get; set; }
 
-        public DateTime ShiftEnd { get; set; }
+        public DateTime? ShiftEnd { get; set; }
 
         public DateTime? ClockInTime { get; set; }
 
