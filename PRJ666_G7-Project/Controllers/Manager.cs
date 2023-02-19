@@ -469,11 +469,11 @@ namespace PRJ666_G7_Project.Controllers
         {
             try
             {
-                foreach (var e in ds.RoleClaims)
+                /*foreach (var e in ds.RoleClaims)
                 {
                     ds.Entry(e).State = System.Data.Entity.EntityState.Deleted;
                 }
-                ds.SaveChanges();
+                ds.SaveChanges();*/
 
                 foreach (var e in ds.Shifts)
                 {
@@ -481,17 +481,17 @@ namespace PRJ666_G7_Project.Controllers
                 }
                 ds.SaveChanges();
 
-                foreach (var e in ds.Tasks)
+                /*foreach (var e in ds.Tasks)
                 {
                     ds.Entry(e).State = System.Data.Entity.EntityState.Deleted;
                 }
-                ds.SaveChanges();
+                ds.SaveChanges();*/
 
-                foreach (var e in ds.Employees)
+                /*foreach (var e in ds.Employees)
                 {
                     ds.Entry(e).State = System.Data.Entity.EntityState.Deleted;
                 }
-                ds.SaveChanges();
+                ds.SaveChanges();*/
 
                 /*foreach (var e in ds.Tracks)
                 {

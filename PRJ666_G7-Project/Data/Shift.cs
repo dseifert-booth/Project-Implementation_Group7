@@ -9,6 +9,13 @@ namespace PRJ666_G7_Project.Data
 {
     public class Shift
     {
+
+        public Shift()
+        {
+            Employees = new HashSet<Employee>();
+            Tasks = new HashSet<Task>();
+        }
+
         [Key]
         public int Id { get; set; }
 

@@ -16,7 +16,7 @@ namespace PRJ666_G7_Project.Data
 
         public string FullName { get; set; }
 
-        public ICollection<string> RoleClaims { get; set; }
+        public ICollection<Shift> Shifts { get; set; }
 
     }
 }

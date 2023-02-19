@@ -295,7 +295,7 @@ namespace PRJ666_G7_Project.Controllers
                     var roleSet = new HashSet<string>();
 
                     foreach (var role in model.Roles) roleSet.Add(role);
-                    var employee = new Employee { UserName = user.UserName, FullName = user.FullName, RoleClaims = roleSet };
+                    var employee = new Employee { UserName = user.UserName, FullName = user.FullName };
 
                     m.EmployeeAdd(employee);
 

@@ -21,7 +21,7 @@ namespace PRJ666_G7_Project.Models
         public DateTime ShiftEnd { get; set; }
 
         [Display(Name = "Assigned employees")]
-        public IEnumerable<ApplicationUser> Employees { get; set; }
+        public IEnumerable<Employee> Employees { get; set; }
     }
 
     public class ShiftWithDetailViewModel : ShiftBaseViewModel
