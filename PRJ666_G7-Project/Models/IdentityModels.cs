@@ -66,5 +66,7 @@ namespace PRJ666_G7_Project.Models
         {
             return new ApplicationDbContext();
         }
+
+        public System.Data.Entity.DbSet<PRJ666_G7_Project.Models.ShiftBaseViewModel> ShiftBaseViewModels { get; set; }
     }
 }
