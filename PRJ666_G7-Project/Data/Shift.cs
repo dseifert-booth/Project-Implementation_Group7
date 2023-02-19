@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using PRJ666_G7_Project.Models;
 
 namespace PRJ666_G7_Project.Data
 {
@@ -17,17 +18,16 @@ namespace PRJ666_G7_Project.Data
         [Required]
         public DateTime ShiftEnd { get; set; }
 
-        public DateTime ClockInTime { get; set; }
+        public DateTime? ClockInTime { get; set; }
 
-        public DateTime ClockOutTime { get; set; }
+        public DateTime? ClockOutTime { get; set; }
 
-        // Username who is assigned the shift
-        [Required, StringLength(200)]
-        public string Employee { get; set; }
-
-        // Username who assigned the shift
+        // Manager who assigned the shift
         [Required, StringLength(200)]
         public string Manager { get; set; }
+
+        // Employees who is assigned the shift
+        public ICollection<Employee> Employees { get; set; }
 
         public ICollection<Task> Tasks { get; set; }
 

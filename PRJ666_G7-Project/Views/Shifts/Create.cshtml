@@ -1,74 +1,65 @@
-﻿@model PRJ666_G7_Project.Data.Shift
+﻿@model PRJ666_G7_Project.Models.ShiftAddFormViewModel
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Add a new shift to schedule";
 }
 
-<h2>Create</h2>
+<h2>@ViewBag.Title</h2>
 
 
 @using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()
     
-    <div class="form-horizontal">
-        <h4>Shift</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.ShiftStart, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.ShiftStart, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ShiftStart, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.ShiftEnd, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.ShiftEnd, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ShiftEnd, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.ClockInTime, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.ClockInTime, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ClockInTime, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.ClockOutTime, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.ClockOutTime, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ClockOutTime, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Employee, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Employee, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Employee, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Manager, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Manager, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Manager, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
+<div class="form-horizontal">
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.ShiftStart, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.ShiftStart, new { htmlAttributes = new { @class = "form-control", @type = "datetime-local" } })
+            @Html.ValidationMessageFor(model => model.ShiftStart, "", new { @class = "text-danger" })
         </div>
     </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ShiftEnd, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.ShiftEnd, new { htmlAttributes = new { @class = "form-control", @type = "datetime-local" } })
+            @Html.ValidationMessageFor(model => model.ShiftEnd, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="col-md-offset-1 col-md-5 well">
+        <h4>@Html.DisplayNameFor(model => model.EmployeeList)</h4>
+
+        @foreach (var emp in Model.EmployeeList)
+        {
+            <div class="checkbox">
+                <label><input type="checkbox" name="EmployeeUserNames" value="@emp.Value" />@emp.Value - @emp.Text</label>
+            </div>
+        }
+        @Html.ValidationMessageFor(model => model.EmployeeList, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="col-md-offset-1 col-md-4 well">
+        <h4>@Html.DisplayNameFor(model => model.TaskList)</h4>
+
+        @foreach (var t in Model.TaskList)
+        {
+            <div class="checkbox">
+                <label><input type="checkbox" name="TaskIds" value="@t.Value" />@t.Text</label>
+            </div>
+        }
+        @Html.ValidationMessageFor(model => model.TaskList, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Create" class="btn btn-default" />
+        </div>
+    </div>
+</div>
 }
 
 <div>

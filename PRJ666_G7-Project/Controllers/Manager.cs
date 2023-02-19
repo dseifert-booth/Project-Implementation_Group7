@@ -60,6 +60,16 @@ namespace PRJ666_G7_Project.Controllers
             // Object mapper definitions
 
             cfg.CreateMap<Models.RegisterViewModel, Models.RegisterViewModelForm>();
+
+                cfg.CreateMap<Employee, EmployeeBaseViewModel>();
+
+                cfg.CreateMap<Shift, ShiftBaseViewModel>();
+                cfg.CreateMap<Shift, ShiftWithDetailViewModel>();
+                cfg.CreateMap<ShiftAddViewModel, Shift>();
+
+                cfg.CreateMap<Task, TaskBaseViewModel>();
+                cfg.CreateMap<Task, TaskWithDetailViewModel>();
+                cfg.CreateMap<TaskAddViewModel, Task>();
             });
 
             mapper = config.CreateMapper();
@@ -81,8 +91,81 @@ namespace PRJ666_G7_Project.Controllers
         // Remember to use the suggested naming convention, for example:
         // ProductGetAll(), ProductGetById(), ProductAdd(), ProductEdit(), and ProductDelete().
 
+        #region Use Case Methods
+
+        public IEnumerable<ApplicationUser> EmployeesGetAll() 
+        {
+            return ds.Users.Where(emp => emp.Claims.Any(c => c.ClaimType == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role" && c.ClaimValue == "Employee"))
+                           .OrderBy(emp => emp.FullName).AsEnumerable();
+        }
 
 
+
+        public void EmployeeAdd(Employee newUser)
+        {
+            ds.Employees.Add(newUser);
+            ds.SaveChanges();
+        }
+
+        public IEnumerable<ShiftBaseViewModel> ShiftGetAll()
+        {
+            return mapper.Map<IEnumerable<Shift>, IEnumerable<ShiftBaseViewModel>>(ds.Shifts.Include("Employees").OrderBy(a => a.ShiftStart));
+        }
+
+        public ShiftWithDetailViewModel ShiftGetByIdWithDetail(int id)
+        {
+            var obj = ds.Shifts.Include("Employees").Include("Tasks").SingleOrDefault(a => a.Id == id);
+
+            var detailItem = mapper.Map<Shift, ShiftWithDetailViewModel>(obj);
+            detailItem.NumTasks = obj.Tasks.Count;
+
+            return detailItem;
+        }
+
+        public ShiftWithDetailViewModel ShiftAdd(ShiftAddViewModel newShift)
+        {
+
+            ICollection<Task> tasks = new HashSet<Task>();
+            ICollection<Employee> employees = new HashSet<Employee>();
+
+            foreach (var taskId in newShift.TaskIds)
+            {
+                var task = ds.Tasks.Find(taskId);
+                tasks.Add(task);
+            }
+
+            foreach (var userName in newShift.EmployeeUserNames)
+            {
+                var emp = ds.Employees.Where(a => a.UserName == userName).SingleOrDefault();
+                employees.Add(emp);
+            }
+
+            if (tasks.Count == 0)
+            {
+                return null;
+            }
+            else
+            {
+                var addedItem = ds.Shifts.Add(mapper.Map<ShiftAddViewModel, Shift>(newShift));
+
+                addedItem.Tasks = tasks;
+
+                addedItem.Employees = employees;
+
+                addedItem.Manager = HttpContext.Current.User.Identity.Name;
+
+                ds.SaveChanges();
+
+                return (addedItem == null) ? null : mapper.Map<Shift, ShiftWithDetailViewModel>(addedItem);
+            }
+        }
+
+        public IEnumerable<TaskBaseViewModel> TaskGetAll()
+        {
+            return mapper.Map<IEnumerable<Task>, IEnumerable<TaskBaseViewModel>>(ds.Tasks.OrderBy(a => a.Id));
+        }
+
+        #endregion
 
         // *** Add your methods above this line **
 
@@ -115,10 +198,72 @@ namespace PRJ666_G7_Project.Controllers
             if (ds.RoleClaims.Count() == 0)
             {
                 // Add role claims here
-                ds.RoleClaims.Add(new RoleClaim { Name = "Super Admin", AuthLevel = 4 });
-                ds.RoleClaims.Add(new RoleClaim { Name = "Administrator", AuthLevel = 3 });
-                ds.RoleClaims.Add(new RoleClaim { Name = "Manager", AuthLevel = 2 });
-                ds.RoleClaims.Add(new RoleClaim { Name = "Employee", AuthLevel = 1 });
+                ds.RoleClaims.Add(new RoleClaim { Name = "Super Admin" });
+                ds.RoleClaims.Add(new RoleClaim { Name = "Administrator" });
+                ds.RoleClaims.Add(new RoleClaim { Name = "Manager" });
+                ds.RoleClaims.Add(new RoleClaim { Name = "Employee" });
+
+                ds.SaveChanges();
+                done = true;
+            }
+
+            // *** Shifts ***
+
+            if (ds.Shifts.Count() == 0)
+            {
+                // Add shifts here
+
+
+                ds.SaveChanges();
+                done = true;
+            }
+
+            // *** Tasks ***
+
+            if (ds.Tasks.Count() == 0)
+            {
+                // Add shifts here
+                ds.Tasks.Add(new Task 
+                { 
+                    Name = "test1", 
+                    Description = "test description 1",
+                    Complete = false
+                });
+                ds.Tasks.Add(new Task
+                {
+                    Name = "test2",
+                    Description = "test description 2",
+                    Complete = false
+                });
+
+                ds.SaveChanges();
+                done = true;
+            }
+
+            // *** Employees ***
+            if (ds.Employees.Count() == 0)
+            {
+                // Add role claims here
+                ds.Employees.Add(new Employee 
+                { 
+                    UserName = "jdoe@example.com",
+                    FullName = "John Doe"
+                });
+                ds.Employees.Add(new Employee 
+                {
+                    UserName = "superadmin@example.com",
+                    FullName = "Super Admin"
+                });
+                ds.Employees.Add(new Employee 
+                {
+                    UserName = "jdoer@example.com",
+                    FullName = "John Doer"
+                });
+                ds.Employees.Add(new Employee 
+                {
+                    UserName = "employee1@example.com",
+                    FullName = "Employee One"
+                });
 
                 ds.SaveChanges();
                 done = true;
@@ -325,6 +470,24 @@ namespace PRJ666_G7_Project.Controllers
             try
             {
                 foreach (var e in ds.RoleClaims)
+                {
+                    ds.Entry(e).State = System.Data.Entity.EntityState.Deleted;
+                }
+                ds.SaveChanges();
+
+                foreach (var e in ds.Shifts)
+                {
+                    ds.Entry(e).State = System.Data.Entity.EntityState.Deleted;
+                }
+                ds.SaveChanges();
+
+                foreach (var e in ds.Tasks)
+                {
+                    ds.Entry(e).State = System.Data.Entity.EntityState.Deleted;
+                }
+                ds.SaveChanges();
+
+                foreach (var e in ds.Employees)
                 {
                     ds.Entry(e).State = System.Data.Entity.EntityState.Deleted;
                 }

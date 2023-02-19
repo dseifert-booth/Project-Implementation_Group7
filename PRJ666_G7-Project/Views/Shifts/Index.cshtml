@@ -1,10 +1,10 @@
-﻿@model IEnumerable<PRJ666_G7_Project.Data.Shift>
+﻿@model IEnumerable<PRJ666_G7_Project.Models.ShiftBaseViewModel>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "All Shifts";
 }
 
-<h2>Index</h2>
+<h2>@ViewBag.Title</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -18,16 +18,7 @@
             @Html.DisplayNameFor(model => model.ShiftEnd)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ClockInTime)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ClockOutTime)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Employee)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Manager)
+            @Html.DisplayNameFor(model => model.Employees)
         </th>
         <th></th>
     </tr>
@@ -41,21 +32,24 @@
             @Html.DisplayFor(modelItem => item.ShiftEnd)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.ClockInTime)
+            @if (item.Employees.Count() == 0)
+            {
+                <p>No employees set!</p>
+            } 
+            else
+            {
+                <ul>
+                    @foreach (var emp in item.Employees)
+                    {
+                        <li>@emp</li>
+                    }
+                </ul>
+            }
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.ClockOutTime)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Employee)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Manager)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @*@Html.ActionLink("Edit", "Edit", new { id=item.Id }) |*@
             @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            @*@Html.ActionLink("Delete", "Delete", new { id=item.Id })*@
         </td>
     </tr>
 }

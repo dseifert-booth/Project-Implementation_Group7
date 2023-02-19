@@ -1,4 +1,4 @@
-﻿@model PRJ666_G7_Project.Data.Shift
+﻿@model PRJ666_G7_Project.Models.ShiftWithDetailViewModel
 
 @{
     ViewBag.Title = "Details";
@@ -11,51 +11,42 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.ShiftStart)
+            @Html.DisplayNameFor(Model => Model.ShiftStart)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.ShiftStart)
+            @Html.DisplayFor(Model => Model.ShiftStart)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.ShiftEnd)
+            @Html.DisplayNameFor(Model => Model.ShiftEnd)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.ShiftEnd)
+            @Html.DisplayFor(Model => Model.ShiftEnd)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.ClockInTime)
+            @Html.DisplayNameFor(Model => Model.Employees)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.ClockInTime)
+            @foreach (var emp in Model.Employees)
+            {
+                <p>@emp</p>
+            }
         </dd>
 
+
         <dt>
-            @Html.DisplayNameFor(model => model.ClockOutTime)
+            @Html.DisplayNameFor(Model => Model.Tasks)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.ClockOutTime)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Employee)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Employee)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Manager)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Manager)
+            @foreach (var task in Model.Tasks)
+            {
+                <p>@task.Name</p>
+            }
         </dd>
 
     </dl>
