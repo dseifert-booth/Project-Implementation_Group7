@@ -14,32 +14,47 @@ namespace PRJ666_G7_Project.Controllers
     public class ShiftsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        private Manager m = new Manager();
 
         // GET: Shifts
         public ActionResult Index()
         {
-            return View(db.Shifts.ToList());
+            return View(m.ShiftGetAll());
         }
 
         // GET: Shifts/Details/5
         public ActionResult Details(int? id)
         {
+            var shift = m.ShiftGetByIdWithDetail(id.GetValueOrDefault());
+
             if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Shift shift = db.Shifts.Find(id);
-            if (shift == null)
             {
                 return HttpNotFound();
             }
-            return View(shift);
+            else
+            {
+                return View(shift);
+            }
         }
 
         // GET: Shifts/Create
         public ActionResult Create()
         {
-            return View();
+            var form = new ShiftAddFormViewModel();
+
+            form.EmployeeList = new MultiSelectList
+                (items: m.EmployeesGetAll(),
+                dataValueField: "UserName",
+                dataTextField: "FullName"
+                );
+
+            form.TaskList = new MultiSelectList
+                (items: m.TaskGetAll(),
+                dataValueField: "Id",
+                dataTextField: "Name"
+                );
+
+            return View(form);
         }
 
         // POST: Shifts/Create
@@ -47,16 +62,25 @@ namespace PRJ666_G7_Project.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,ShiftStart,ShiftEnd,ClockInTime,ClockOutTime,Employee,Manager")] Shift shift)
+        public ActionResult Create(ShiftAddViewModel newItem)
         {
-            if (ModelState.IsValid)
+            // Validate the input
+            if (!ModelState.IsValid)
             {
-                db.Shifts.Add(shift);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                return View(newItem);
             }
 
-            return View(shift);
+            // Process the input
+            var addedItem = m.ShiftAdd(newItem);
+
+            if (addedItem == null)
+            {
+                return View(newItem);
+            }
+            else
+            {
+                return RedirectToAction("Detail", "Shifts");
+            }
         }
 
         // GET: Shifts/Edit/5

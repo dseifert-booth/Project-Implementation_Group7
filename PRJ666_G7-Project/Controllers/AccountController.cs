@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
@@ -8,6 +9,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using PRJ666_G7_Project.Data;
 using PRJ666_G7_Project.Models;
 
 namespace PRJ666_G7_Project.Controllers
@@ -274,9 +276,12 @@ namespace PRJ666_G7_Project.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
+            Manager m = new Manager();
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FullName = model.GivenName + " " + model.Surname };
+
+                
 
                 var result = await UserManager.CreateAsync(user, model.Password);
 
@@ -287,6 +292,12 @@ namespace PRJ666_G7_Project.Controllers
                     // GivenName and Surname are claims - we gather them on the HTML Form
                     // The RegisterViewModel class was modified, to add these properties
                     // We also configure some "role" claims
+                    var roleSet = new HashSet<string>();
+
+                    foreach (var role in model.Roles) roleSet.Add(role);
+                    var employee = new Employee { UserName = user.UserName, FullName = user.FullName, RoleClaims = roleSet };
+
+                    m.EmployeeAdd(employee);
 
                     // Add claims
                     await UserManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Email, model.Email));
@@ -319,7 +330,7 @@ namespace PRJ666_G7_Project.Controllers
 
             // If we got this far, something failed, redisplay form
 
-            Manager m = new Manager();
+            //Manager m = new Manager();
 
             var form = m.mapper.Map<RegisterViewModelForm>(model);
             var roles = m.RoleClaimGetAllStrings();

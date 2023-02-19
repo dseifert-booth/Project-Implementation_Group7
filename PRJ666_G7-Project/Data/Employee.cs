@@ -6,11 +6,17 @@ using System.Web;
 
 namespace PRJ666_G7_Project.Data
 {
-    public class RoleClaim
+    public class Employee
     {
+
+        [Key]
         public int Id { get; set; }
 
-        [Required, StringLength(100)]
-        public string Name { get; set; }
+        public string UserName { get; set; }
+
+        public string FullName { get; set; }
+
+        public ICollection<string> RoleClaims { get; set; }
+
     }
 }
