@@ -66,6 +66,7 @@ namespace PRJ666_G7_Project.Controllers
                 cfg.CreateMap<Shift, ShiftBaseViewModel>();
                 cfg.CreateMap<Shift, ShiftWithDetailViewModel>();
                 cfg.CreateMap<ShiftAddViewModel, Shift>();
+                cfg.CreateMap<ShiftBaseViewModel, ShiftEditFormViewModel>();
 
                 cfg.CreateMap<Task, TaskBaseViewModel>();
                 cfg.CreateMap<Task, TaskWithDetailViewModel>();
@@ -116,10 +117,7 @@ namespace PRJ666_G7_Project.Controllers
         {
             var obj = ds.Shifts.Include("Employees").Include("Tasks").SingleOrDefault(a => a.Id == id);
 
-            var detailItem = mapper.Map<Shift, ShiftWithDetailViewModel>(obj);
-            detailItem.NumTasks = obj.Tasks.Count;
-
-            return detailItem;
+            return mapper.Map<Shift, ShiftWithDetailViewModel>(obj);
         }
 
         public ShiftWithDetailViewModel ShiftAdd(ShiftAddViewModel newShift)
@@ -158,6 +156,62 @@ namespace PRJ666_G7_Project.Controllers
 
                 return (addedItem == null) ? null : mapper.Map<Shift, ShiftWithDetailViewModel>(addedItem);
             }
+        }
+
+        public ShiftWithDetailViewModel ShiftEdit(ShiftEditViewModel shift)
+        {
+            var isSuperAdmin = HttpContext.Current.User.IsInRole("Super Admin");
+            var isAdmin = HttpContext.Current.User.IsInRole("Administrator");
+            var isManager = HttpContext.Current.User.IsInRole("Manager");
+            var isEmployee = HttpContext.Current.User.IsInRole("Employee");
+
+            var obj = ds.Shifts.Include("Employees").Include("Tasks").SingleOrDefault(a => a.Id == shift.Id);
+
+            if (obj == null)
+            {
+                return null;
+            }
+            else
+            {
+                if (isSuperAdmin || isAdmin || isManager)
+                {
+
+                    foreach (var task in obj.Tasks)
+                    {
+                        foreach (var taskId in shift.TaskIds) if (task.Id == taskId) obj.Tasks.Remove(task);
+                    }
+
+                    obj.ShiftStart = shift.ShiftStart;
+                    obj.ShiftEnd = shift.ShiftEnd;
+                } 
+                else if (isEmployee)
+                {
+                    bool found;
+                    foreach(var task in obj.Tasks)
+                    {
+                        found = false;
+                        foreach (var taskId in shift.TaskIds) if (task.Id == taskId)
+                            {
+                                task.Complete = true;
+                                found = true;
+                            }
+                        if (!found) task.Complete = false; 
+                    }
+
+                    obj.ClockInTime = shift.ClockInTime;
+                    obj.ClockOutTime = shift.ClockOutTime;
+
+                    
+                } else
+                {
+                    return null;
+                }
+
+                ds.SaveChanges();
+
+                return mapper.Map<Shift, ShiftWithDetailViewModel>(obj);
+            }
+
         }
 
         public IEnumerable<TaskBaseViewModel> TaskGetAll()
