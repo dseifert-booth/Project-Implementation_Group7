@@ -49,12 +49,7 @@
             @{
                 foreach (var item in Model.RoleList)
                 {
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" name="Roles" checked="@item.Selected" value="@item.Text" />@item.Text
-                        </label>
-                    </div>
-                    @*if (Model.UserType.IsSuperAdmin)
+                    if (Model.UserType.IsSuperAdmin)
                     {
                         if (item.Text != "Super Admin")
                         {
@@ -86,7 +81,7 @@
                                 </label>
                             </div>
                         }
-                    }*@
+                    }
                     @*<div class="checkbox">
                     <label>
                         <input type="checkbox" name="Roles" checked="@item.Selected" value="@item.Text" />@item.Text

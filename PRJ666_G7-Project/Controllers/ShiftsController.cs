@@ -86,16 +86,40 @@ namespace PRJ666_G7_Project.Controllers
         // GET: Shifts/Edit/5
         public ActionResult Edit(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Shift shift = db.Shifts.Find(id);
-            if (shift == null)
+            var obj = m.ShiftGetByIdWithDetail(id.GetValueOrDefault());
+
+            if (obj == null)
             {
                 return HttpNotFound();
             }
-            return View(shift);
+            else
+            {
+                var formObj = m.mapper.Map<ShiftBaseViewModel, ShiftEditFormViewModel>(obj);
+
+                formObj.UserType = m.User;
+
+                if (formObj.UserType.isEmployee)
+                {
+                    formObj.TaskList = new MultiSelectList
+                    (items: obj.Tasks,
+                    dataValueField: "Id",
+                    dataTextField: "Name",
+                    selectedValues: obj.Tasks.Where(t => t.Complete).Select(t => t.Id)
+                    );
+
+                    // SelectedValues do not recieve anything, page does not show correct tasks as "Completed"
+                }
+                else
+                {
+                    formObj.TaskList = new MultiSelectList
+                    (items: obj.Tasks,
+                    dataValueField: "Id",
+                    dataTextField: "Name"
+                    );
+                }
+
+                return View(formObj);
+            }
         }
 
         // POST: Shifts/Edit/5
@@ -103,15 +127,28 @@ namespace PRJ666_G7_Project.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,ShiftStart,ShiftEnd,ClockInTime,ClockOutTime,Employee,Manager")] Shift shift)
+        public ActionResult Edit(int? id, ShiftEditViewModel shift)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                db.Entry(shift).State = EntityState.Modified;
-                db.SaveChanges();
+                return RedirectToAction("Edit", new { id = shift.Id });
+            }
+
+            if (id.GetValueOrDefault() != shift.Id)
+            {
                 return RedirectToAction("Index");
             }
-            return View(shift);
+
+            var editedItem = m.ShiftEdit(shift);
+
+            if (editedItem == null)
+            {
+                return RedirectToAction("Edit", new { id = shift.Id });
+            }
+            else
+            {
+                return RedirectToAction("Details", new { id = shift.Id });
+            }
         }
 
         // GET: Shifts/Delete/5
