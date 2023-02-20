@@ -16,7 +16,7 @@ namespace PRJ666_G7_Project.Models
 
         public string FullName { get; set; }
 
-        public ICollection<string> RoleClaims { get; set; }
+        public int AuthLevel { get; set; }
 
     }
 }
