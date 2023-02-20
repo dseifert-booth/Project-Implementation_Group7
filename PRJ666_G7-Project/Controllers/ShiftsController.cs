@@ -81,7 +81,7 @@ namespace PRJ666_G7_Project.Controllers
             }
             else
             {
-                return RedirectToAction("Detail", "Shifts");
+                return RedirectToAction("Details", "Shifts", new { id = addedItem.Id });
             }
         }
 
@@ -99,9 +99,9 @@ namespace PRJ666_G7_Project.Controllers
             {
                 var formObj = m.mapper.Map<ShiftBaseViewModel, ShiftEditFormViewModel>(obj);
 
-                formObj.UserType = m.User;
+                formObj.UserAuthLevel = m.EmpGetByUserName(m.User.Name).AuthLevel;
 
-                if (formObj.UserType.isEmployee)
+                if (formObj.UserAuthLevel < 2)
                 {
                     formObj.TaskList = new MultiSelectList
                     (items: obj.Tasks,
@@ -152,7 +152,7 @@ namespace PRJ666_G7_Project.Controllers
             }
             else
             {
-                return RedirectToAction("Details", new { id = shift.Id });
+                return RedirectToAction("Details", "Shifts", new { id = shift.Id });
             }
         }
 

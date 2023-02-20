@@ -93,7 +93,7 @@ namespace PRJ666_G7_Project.Models
         [Required, StringLength(128, ErrorMessage = "The {0} must be {2} or fewer characters.")]
         public string Surname { get; set; }
 
-        public RequestUser UserType { get; set; }
+        public int UserAuthLevel { get; set; }
 
         // For the role claims
         [Display(Name = "Role(s) - select one or more")]

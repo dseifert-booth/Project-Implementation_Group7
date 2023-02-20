@@ -175,6 +175,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CustomAuthorizeAttribute.cs" />
+    <Compile Include="Controllers\EmployeesController.cs" />
     <Compile Include="Controllers\ErrorsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoadDataController.cs" />
@@ -269,6 +270,18 @@
     <Compile Include="Migrations\202302191943307_migrationShiftDelete.Designer.cs">
       <DependentUpon>202302191943307_migrationShiftDelete.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202302192232347_migrationAppUsers.cs" />
+    <Compile Include="Migrations\202302192232347_migrationAppUsers.Designer.cs">
+      <DependentUpon>202302192232347_migrationAppUsers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202302192306086_migrationEmpAuthLevel.cs" />
+    <Compile Include="Migrations\202302192306086_migrationEmpAuthLevel.Designer.cs">
+      <DependentUpon>202302192306086_migrationEmpAuthLevel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202302192348259_migrationEmpAuthLevelForReal.cs" />
+    <Compile Include="Migrations\202302192348259_migrationEmpAuthLevelForReal.Designer.cs">
+      <DependentUpon>202302192348259_migrationEmpAuthLevelForReal.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\EmployeeViewModels.cs" />
@@ -352,6 +365,7 @@
     <Content Include="Views\Tasks\Index.cshtml" />
     <Content Include="Views\Shifts\Edit.cshtml" />
     <Content Include="Views\Shifts\Delete.cshtml" />
+    <Content Include="Views\Employees\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -427,7 +441,17 @@
     <EmbeddedResource Include="Migrations\202302191943307_migrationShiftDelete.resx">
       <DependentUpon>202302191943307_migrationShiftDelete.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202302192232347_migrationAppUsers.resx">
+      <DependentUpon>202302192232347_migrationAppUsers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202302192306086_migrationEmpAuthLevel.resx">
+      <DependentUpon>202302192306086_migrationEmpAuthLevel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202302192348259_migrationEmpAuthLevelForReal.resx">
+      <DependentUpon>202302192348259_migrationEmpAuthLevelForReal.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
