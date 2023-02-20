@@ -68,5 +68,9 @@ namespace PRJ666_G7_Project.Models
         }
 
         public System.Data.Entity.DbSet<PRJ666_G7_Project.Models.ShiftBaseViewModel> ShiftBaseViewModels { get; set; }
+
+        //public System.Data.Entity.DbSet<PRJ666_G7_Project.Models.ApplicationUser> ApplicationUsers { get; set; }
+
+        public System.Data.Entity.DbSet<PRJ666_G7_Project.Models.EmployeeBaseViewModel> EmployeeBaseViewModels { get; set; }
     }
 }

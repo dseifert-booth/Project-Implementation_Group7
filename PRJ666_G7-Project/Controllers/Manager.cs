@@ -100,7 +100,17 @@ namespace PRJ666_G7_Project.Controllers
                            .OrderBy(emp => emp.FullName).AsEnumerable();
         }
 
+        public IEnumerable<EmployeeBaseViewModel> EmpGetAll()
+        {
+            return mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeBaseViewModel>>(ds.Employees);
+        }
 
+        public EmployeeBaseViewModel EmpGetByUserName(string userName)
+        {
+            var obj = ds.Employees.SingleOrDefault(e => e.UserName == userName);
+
+            return mapper.Map<Employee, EmployeeBaseViewModel>(obj);
+        }
 
         public void EmployeeAdd(Employee newUser)
         {
@@ -656,12 +666,6 @@ namespace PRJ666_G7_Project.Controllers
 
                 IsAuthenticated = true;
 
-                
-                isEmployee = user.HasClaim(ClaimTypes.Role, "Employee");
-                isManager = user.HasClaim(ClaimTypes.Role, "Manager");
-                IsAdmin = user.HasClaim(ClaimTypes.Role, "Administrator");
-                IsSuperAdmin = user.HasClaim(ClaimTypes.Role, "Super Admin");
-
                 // You can change the string value in your app to match your app domain logic
                 //IsAdmin = user.HasClaim(ClaimTypes.Role, "Admin") ? true : false;
             }
@@ -672,10 +676,6 @@ namespace PRJ666_G7_Project.Controllers
                 GivenName = "Unauthenticated";
                 Surname = "Anonymous";
                 IsAuthenticated = false;
-                isEmployee = false;
-                isManager = false;
-                IsAdmin = false;
-                IsSuperAdmin = false;
             }
 
             // Compose the nicely-formatted full names
@@ -696,14 +696,6 @@ namespace PRJ666_G7_Project.Controllers
         public string NamesLastFirst { get; private set; }
 
         public bool IsAuthenticated { get; private set; }
-
-        public bool isEmployee { get; private set; }
-
-        public bool isManager { get; private set; }
-
-        public bool IsAdmin { get; private set; }
-
-        public bool IsSuperAdmin { get; private set; }
 
         public bool HasRoleClaim(string value)
         {

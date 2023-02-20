@@ -16,6 +16,8 @@ namespace PRJ666_G7_Project.Data
 
         public string FullName { get; set; }
 
+        public int AuthLevel { get; set; }
+
         public ICollection<Shift> Shifts { get; set; }
 
     }
