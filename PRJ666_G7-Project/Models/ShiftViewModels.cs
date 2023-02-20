@@ -93,7 +93,7 @@ namespace PRJ666_G7_Project.Models
 
         public IEnumerable<string> TaskIds { get; set; }
 
-        public RequestUser UserType { get; set; }
+        public int UserAuthLevel { get; set; }
     }
 
     public class ShiftEditViewModel

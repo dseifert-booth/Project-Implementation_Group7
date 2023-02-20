@@ -3,29 +3,36 @@
 }
 
 <div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+    <h1>Work Shift Management Tool</h1>
+    <p class="lead">Created By: Darius Seifert Booth - Denys Syniavskyi</p>
 </div>
 
 <div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
+    <div class="col-md-6">
+        <h2>Purpose of this app</h2>
         <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
+            We in Group 7 designed this application for the purpose of assisting small-end businesses/organizations
+            with managing data involving employees and the shifts that they get assigned to. Additionally, this app
+            would help with communications between employees and management for the purposes of shift/task assignment.
         </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+        @Html.ActionLink(HttpUtility.HtmlDecode("Employees &raquo;"), "Index", "Employees", null, new { @class = "btn btn-default" })
     </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
+    <div class="col-md-6">
+        <h2>Capabilities of the WSMT</h2>
+        <p>
+            - Management-level users can create accounts of lower levels than themselves (e.g., Manager creating Employee accounts
+            for new employees).<br />
+            - Management-level users can create new Shift entries in the database. Shift entries are created by entering start
+            and end times for the shift, as well as selecting which Tasks are to be completed on said shift. Employees can optionally
+            be set, or the shift can be left open for employees to volunteer for. Management can also edit and delete shifts. <br />
+            - Low-level employees can edit clocking in/out values of shifts they are assigned to, as well as mark off tasks
+            that have been completed.
+        </p>
+        @Html.ActionLink(HttpUtility.HtmlDecode("Shifts &raquo;"), "Index", "Shifts", null, new { @class = "btn btn-default" })
     </div>
-    <div class="col-md-4">
+    @*<div class="col-md-4">
         <h2>Web Hosting</h2>
         <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
         <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
+    </div>*@
 </div>

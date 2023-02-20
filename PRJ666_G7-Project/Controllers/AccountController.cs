@@ -260,10 +260,13 @@ namespace PRJ666_G7_Project.Controllers
             
             var roles = m.RoleClaimGetAllStrings();
 
+            var user = m.EmpGetByUserName(m.User.Name);
+
             // Define a register form
             var form = new RegisterViewModelForm();
             form.RoleList = new MultiSelectList(roles);
-            form.UserType = m.User;
+            form.UserAuthLevel = user.AuthLevel;
+            
 
             return View(form);
         }
@@ -295,6 +298,24 @@ namespace PRJ666_G7_Project.Controllers
 
                     foreach (var role in model.Roles) roleSet.Add(role);
                     var employee = new Employee { UserName = user.UserName, FullName = user.FullName };
+
+                    switch (roleSet.Where(s => s != "User").FirstOrDefault())
+                    {
+                        case "Super Admin":
+                            employee.AuthLevel = 4;
+                            break;
+                        case "Admin":
+                            employee.AuthLevel = 3;
+                            break;
+                        case "Manager":
+                            employee.AuthLevel = 2;
+                            break;
+                        case "Employee":
+                            employee.AuthLevel = 1;
+                            break;
+                        default:
+                            break;
+                    }
 
                     m.EmployeeAdd(employee);
 

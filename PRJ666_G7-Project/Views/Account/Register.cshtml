@@ -49,7 +49,7 @@
             @{
                 foreach (var item in Model.RoleList)
                 {
-                    if (Model.UserType.IsSuperAdmin)
+                    if (Model.UserAuthLevel == 4)
                     {
                         if (item.Text != "Super Admin")
                         {
@@ -60,9 +60,9 @@
                             </div>
                         }
                     }
-                    else if (Model.UserType.IsAdmin)
+                    else if (Model.UserAuthLevel == 3)
                     {
-                        if (item.Text != "Super Admin" || item.Text != "Administrator")
+                        if (item.Text != "Super Admin" && item.Text != "Administrator")
                         {
                             <div class="checkbox">
                                 <label>
@@ -71,7 +71,7 @@
                             </div>
                         }
                     }
-                    else if (Model.UserType.isManager)
+                    else if (Model.UserAuthLevel == 2)
                     {
                         if (item.Text == "Employee")
                         {
@@ -82,11 +82,6 @@
                             </div>
                         }
                     }
-                    @*<div class="checkbox">
-                    <label>
-                        <input type="checkbox" name="Roles" checked="@item.Selected" value="@item.Text" />@item.Text
-                    </label>
-                </div>*@
                 }
             }
         </div>
