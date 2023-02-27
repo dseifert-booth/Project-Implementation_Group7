@@ -1,0 +1,26 @@
+﻿@model PRJ666_G7_Project.Models.EmployeeScheduleViewModel
+@using PRJ666_G7_Project.Controllers
+
+@{
+    ViewBag.Title = Model.FullName + "'s Schedule";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<hr />
+<dl class="form-horizontal">
+    <div class="form-group">
+        @Html.LabelFor(m => m.ShiftList, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.DropDownList("Shift", Model.ShiftList, "Select a shift", htmlAttributes: new { @id = "shift-ddl", @class = "form-control", @onchange = "" })
+            @Html.ValidationMessageFor(model => model.ShiftList, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div id="schedule-edit-partial"></div>
+</dl>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/loadtasks")
+}

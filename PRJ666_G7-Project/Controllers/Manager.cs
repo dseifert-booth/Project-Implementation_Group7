@@ -62,11 +62,13 @@ namespace PRJ666_G7_Project.Controllers
             cfg.CreateMap<Models.RegisterViewModel, Models.RegisterViewModelForm>();
 
                 cfg.CreateMap<Employee, EmployeeBaseViewModel>();
+                cfg.CreateMap<Employee, EmployeeScheduleViewModel>();
 
                 cfg.CreateMap<Shift, ShiftBaseViewModel>();
                 cfg.CreateMap<Shift, ShiftWithDetailViewModel>();
                 cfg.CreateMap<ShiftAddViewModel, Shift>();
                 cfg.CreateMap<ShiftBaseViewModel, ShiftEditFormViewModel>();
+                cfg.CreateMap<ShiftWithDetailViewModel, EmployeeScheduleEditFormViewModel>();
 
                 cfg.CreateMap<Task, TaskBaseViewModel>();
                 cfg.CreateMap<Task, TaskWithDetailViewModel>();
@@ -94,6 +96,7 @@ namespace PRJ666_G7_Project.Controllers
 
         #region Use Case Methods
 
+        // Check to see if this can be removed (it should be able to)
         public IEnumerable<ApplicationUser> EmployeesGetAll() 
         {
             return ds.Users.Where(emp => emp.Claims.Any(c => c.ClaimType == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role" && c.ClaimValue == "Employee"))
@@ -112,6 +115,41 @@ namespace PRJ666_G7_Project.Controllers
             return mapper.Map<Employee, EmployeeBaseViewModel>(obj);
         }
 
+        public EmployeeScheduleViewModel GetEmployeeScheduleByUserName(string userName)
+        {
+            var schedule = mapper.Map<Employee, EmployeeScheduleViewModel>(ds.Employees.Where(e => e.UserName == userName).SingleOrDefault());
+
+            return schedule;
+        }
+
+        public EmployeeScheduleViewModel EmployeeScheduleEdit(EmployeeScheduleEditViewModel schedule, string userName)
+        {
+            var obj = ds.Shifts.Include("Employees").Include("Tasks").SingleOrDefault(a => a.Id == schedule.ShiftId);
+
+            bool found;
+            foreach (var task in obj.Tasks)
+            {
+                found = false;
+                if (schedule.TaskIds != null)
+                {
+                    foreach (var taskId in schedule.TaskIds) if (task.Id == taskId)
+                        {
+                            task.Complete = true;
+                            found = true;
+                        }
+                }
+                if (!found) task.Complete = false;
+            }
+
+            obj.ClockInTime = schedule.ClockInTime;
+            obj.ClockOutTime = schedule.ClockOutTime;
+
+            ds.SaveChanges();
+
+            return GetEmployeeScheduleByUserName(userName);
+
+        }
+
         public void EmployeeAdd(Employee newUser)
         {
             ds.Employees.Add(newUser);
@@ -128,6 +166,28 @@ namespace PRJ666_G7_Project.Controllers
             var obj = ds.Shifts.Include("Employees").Include("Tasks").SingleOrDefault(a => a.Id == id);
 
             return mapper.Map<Shift, ShiftWithDetailViewModel>(obj);
+        }
+
+        public IEnumerable<ShiftWithDetailViewModel> ShiftGetByEmployeeUserName(string userName)
+        {
+            var shifts = ds.Shifts.Include("Employees").Include("Tasks").ToHashSet();
+
+            var emp = ds.Employees.SingleOrDefault(a => a.UserName == userName);
+
+            if (emp == null) return null;
+
+            var obj = new HashSet<Shift>();
+
+            foreach (var shift in shifts)
+            {
+                foreach (var employee in shift.Employees)
+                {
+                    if (employee.UserName == userName) obj.Add(shift);
+                }
+            }
+            obj = obj.Distinct().ToHashSet();
+
+            return mapper.Map< IEnumerable<Shift>, IEnumerable<ShiftWithDetailViewModel>>(obj);
         }
 
         public ShiftWithDetailViewModel ShiftAdd(ShiftAddViewModel newShift)
@@ -168,6 +228,8 @@ namespace PRJ666_G7_Project.Controllers
             }
         }
 
+
+        // Come back to this, can be optimized
         public ShiftWithDetailViewModel ShiftEdit(ShiftEditViewModel shift)
         {
             var isSuperAdmin = HttpContext.Current.User.IsInRole("Super Admin");

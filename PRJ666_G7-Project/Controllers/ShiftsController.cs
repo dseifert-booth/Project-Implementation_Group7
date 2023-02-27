@@ -11,6 +11,7 @@ using PRJ666_G7_Project.Models;
 
 namespace PRJ666_G7_Project.Controllers
 {
+    [Authorize]
     public class ShiftsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -19,6 +20,7 @@ namespace PRJ666_G7_Project.Controllers
         // GET: Shifts
         public ActionResult Index()
         {
+            ViewBag.UserAuthLevel = m.EmpGetByUserName(m.User.Name).AuthLevel;
             return View(m.ShiftGetAll());
         }
 
@@ -85,7 +87,7 @@ namespace PRJ666_G7_Project.Controllers
             }
         }
 
-        [Authorize(Roles = "Employee,Manager,Administrator,Super Admin")]
+        [Authorize(Roles = "Manager,Administrator,Super Admin")]
         // GET: Shifts/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -99,28 +101,12 @@ namespace PRJ666_G7_Project.Controllers
             {
                 var formObj = m.mapper.Map<ShiftBaseViewModel, ShiftEditFormViewModel>(obj);
 
-                formObj.UserAuthLevel = m.EmpGetByUserName(m.User.Name).AuthLevel;
-
-                if (formObj.UserAuthLevel < 2)
-                {
-                    formObj.TaskList = new MultiSelectList
+                formObj.TaskList = new MultiSelectList
                     (items: obj.Tasks,
                     dataValueField: "Id",
                     dataTextField: "Name",
                     selectedValues: obj.Tasks.Where(t => t.Complete).Select(t => t.Id)
                     );
-
-                    // SelectedValues do not recieve anything, page does not show correct tasks as "Completed"
-                }
-                else
-                {
-                    formObj.TaskList = new MultiSelectList
-                    (items: m.TaskGetAll(),
-                    dataValueField: "Id",
-                    dataTextField: "Name",
-                    selectedValues: obj.Tasks.Select(t => t.Id)
-                    );
-                }
 
                 return View(formObj);
             }
