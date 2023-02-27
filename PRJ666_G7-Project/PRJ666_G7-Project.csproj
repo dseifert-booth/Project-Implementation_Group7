@@ -282,6 +282,22 @@
     <Compile Include="Migrations\202302192348259_migrationEmpAuthLevelForReal.Designer.cs">
       <DependentUpon>202302192348259_migrationEmpAuthLevelForReal.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202302252352332_MigrationSchedule.cs" />
+    <Compile Include="Migrations\202302252352332_MigrationSchedule.Designer.cs">
+      <DependentUpon>202302252352332_MigrationSchedule.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202302262029298_MigrationScheduleShiftList.cs" />
+    <Compile Include="Migrations\202302262029298_MigrationScheduleShiftList.Designer.cs">
+      <DependentUpon>202302262029298_MigrationScheduleShiftList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202302262359541_MigrationUserAuthLevelChange.cs" />
+    <Compile Include="Migrations\202302262359541_MigrationUserAuthLevelChange.Designer.cs">
+      <DependentUpon>202302262359541_MigrationUserAuthLevelChange.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202302270000103_MigrationUserAuthLevelChange2.cs" />
+    <Compile Include="Migrations\202302270000103_MigrationUserAuthLevelChange2.Designer.cs">
+      <DependentUpon>202302270000103_MigrationUserAuthLevelChange2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\EmployeeViewModels.cs" />
@@ -318,6 +334,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\load-tasks.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -366,6 +383,8 @@
     <Content Include="Views\Shifts\Edit.cshtml" />
     <Content Include="Views\Shifts\Delete.cshtml" />
     <Content Include="Views\Employees\Index.cshtml" />
+    <Content Include="Views\Employees\Schedule.cshtml" />
+    <Content Include="Views\Employees\_ScheduleEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -449,6 +468,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202302192348259_migrationEmpAuthLevelForReal.resx">
       <DependentUpon>202302192348259_migrationEmpAuthLevelForReal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202302252352332_MigrationSchedule.resx">
+      <DependentUpon>202302252352332_MigrationSchedule.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202302262029298_MigrationScheduleShiftList.resx">
+      <DependentUpon>202302262029298_MigrationScheduleShiftList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202302262359541_MigrationUserAuthLevelChange.resx">
+      <DependentUpon>202302262359541_MigrationUserAuthLevelChange.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202302270000103_MigrationUserAuthLevelChange2.resx">
+      <DependentUpon>202302270000103_MigrationUserAuthLevelChange2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

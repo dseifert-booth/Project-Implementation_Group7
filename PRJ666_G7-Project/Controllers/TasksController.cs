@@ -11,6 +11,7 @@ using PRJ666_G7_Project.Models;
 
 namespace PRJ666_G7_Project.Controllers
 {
+    [Authorize]
     public class TasksController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

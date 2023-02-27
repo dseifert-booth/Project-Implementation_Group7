@@ -92,8 +92,6 @@ namespace PRJ666_G7_Project.Models
         public MultiSelectList TaskList { get; set; }
 
         public IEnumerable<string> TaskIds { get; set; }
-
-        public int UserAuthLevel { get; set; }
     }
 
     public class ShiftEditViewModel

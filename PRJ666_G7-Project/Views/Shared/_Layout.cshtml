@@ -13,6 +13,7 @@
     @Scripts.Render("~/bundles/modernizr")
     @{
         var userAccount = new PRJ666_G7_Project.Controllers.RequestUser(User as System.Security.Claims.ClaimsPrincipal);
+        var UserAuthLevel = 0;
     }
 </head>
 <body>
@@ -28,8 +29,10 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Shifts", "Index", "Shifts")</li>
-                    <li>@Html.ActionLink("Employees", "Index", "Employees")</li>
+                    <li>@Html.ActionLink("My Schedule", "Schedule", "Employees", new { username = User.Identity.Name }, null)</li>
+                    <li>@Html.ActionLink("Manage Schedule", "Index", "Shifts")</li>
+                    <li>@Html.ActionLink("My Organization", "Index", "Employees")</li>
+                    <li>@Html.ActionLink("Notifications", "Index", "Home")</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

@@ -244,7 +244,7 @@ namespace PRJ666_G7_Project.Controllers
 
         //
         // GET: /Account/Register
-        [AllowAnonymous]
+        [Authorize]
         public ActionResult Register()
         {
             
@@ -265,8 +265,7 @@ namespace PRJ666_G7_Project.Controllers
             // Define a register form
             var form = new RegisterViewModelForm();
             form.RoleList = new MultiSelectList(roles);
-            form.UserAuthLevel = user.AuthLevel;
-            
+            form.UserAuthLevel =  user.AuthLevel;
 
             return View(form);
         }
