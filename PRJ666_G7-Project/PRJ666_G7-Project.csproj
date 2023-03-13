@@ -178,9 +178,11 @@
     <Compile Include="Controllers\LoadDataController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\Manager.cs" />
+    <Compile Include="Controllers\NotificationsController.cs" />
     <Compile Include="Controllers\ShiftsController.cs" />
     <Compile Include="Controllers\TasksController.cs" />
     <Compile Include="Data\Employee.cs" />
+    <Compile Include="Data\Notification.cs" />
     <Compile Include="Data\RoleClaim.cs" />
     <Compile Include="Data\Shift.cs" />
     <Compile Include="Data\Task.cs" />
@@ -295,11 +297,20 @@
     <Compile Include="Migrations\202302270000103_MigrationUserAuthLevelChange2.Designer.cs">
       <DependentUpon>202302270000103_MigrationUserAuthLevelChange2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202303130507331_Notifications.cs" />
+    <Compile Include="Migrations\202303130507331_Notifications.Designer.cs">
+      <DependentUpon>202303130507331_Notifications.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202303130545209_NotificationsPt2.cs" />
+    <Compile Include="Migrations\202303130545209_NotificationsPt2.Designer.cs">
+      <DependentUpon>202303130545209_NotificationsPt2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\EmployeeViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\NotificationViewModels.cs" />
     <Compile Include="Models\ShiftViewModels.cs" />
     <Compile Include="Models\TaskViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -382,6 +393,7 @@
     <Content Include="Views\Employees\Index.cshtml" />
     <Content Include="Views\Employees\Schedule.cshtml" />
     <Content Include="Views\Employees\_ScheduleEdit.cshtml" />
+    <Content Include="Views\Notifications\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -477,6 +489,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202302270000103_MigrationUserAuthLevelChange2.resx">
       <DependentUpon>202302270000103_MigrationUserAuthLevelChange2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202303130507331_Notifications.resx">
+      <DependentUpon>202303130507331_Notifications.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202303130545209_NotificationsPt2.resx">
+      <DependentUpon>202303130545209_NotificationsPt2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

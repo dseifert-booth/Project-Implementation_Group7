@@ -73,6 +73,8 @@ namespace PRJ666_G7_Project.Controllers
                 cfg.CreateMap<Task, TaskBaseViewModel>();
                 cfg.CreateMap<Task, TaskWithDetailViewModel>();
                 cfg.CreateMap<TaskAddViewModel, Task>();
+
+                cfg.CreateMap<Notification, NotificationBaseViewModel>();
             });
 
             mapper = config.CreateMapper();
@@ -150,6 +152,21 @@ namespace PRJ666_G7_Project.Controllers
 
         }
 
+        public void ShiftClockInOut(ShiftWithDetailViewModel shift, bool inOut)
+        {
+            var obj = ds.Shifts.Include("Employees").Include("Tasks").SingleOrDefault(a => a.Id == shift.Id);
+            
+            if (inOut)
+            {
+                obj.ClockInTime = DateTime.Now;
+            } else
+            {
+                obj.ClockOutTime = DateTime.Now;
+            }
+
+            ds.SaveChanges();
+        }
+
         public void EmployeeAdd(Employee newUser)
         {
             ds.Employees.Add(newUser);
@@ -206,6 +223,13 @@ namespace PRJ666_G7_Project.Controllers
             {
                 var emp = ds.Employees.Where(a => a.UserName == userName).SingleOrDefault();
                 employees.Add(emp);
+
+                var notif = new Notification();
+                notif.IssueDateTime = DateTime.Now;
+                notif.Description = "You've been assigned to a new shift from " + newShift.ShiftStart + " to " + newShift.ShiftEnd + ".";
+                notif.Employee = emp;
+                emp.Notifications.Add(notif);
+                ds.Notifications.Add(notif);
             }
 
             if (tasks.Count == 0)
@@ -310,6 +334,11 @@ namespace PRJ666_G7_Project.Controllers
         public IEnumerable<TaskBaseViewModel> TaskGetAll()
         {
             return mapper.Map<IEnumerable<Task>, IEnumerable<TaskBaseViewModel>>(ds.Tasks.OrderBy(a => a.Id));
+        }
+
+        public IEnumerable<NotificationBaseViewModel> NotificationGetAllByEmp(string username)
+        {
+            return mapper.Map<IEnumerable<Notification>, IEnumerable<NotificationBaseViewModel>>(ds.Notifications.Where(a => a.Employee.UserName == username).OrderBy(a => a.Id));
         }
 
         #endregion

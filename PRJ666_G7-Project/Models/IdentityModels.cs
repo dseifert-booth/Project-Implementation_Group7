@@ -37,6 +37,8 @@ namespace PRJ666_G7_Project.Models
 
         public DbSet<Employee> Employees { get; set; }
 
+        public DbSet<Notification> Notifications { get; set; }
+
         /*public DbSet<Genre> Genres { get; set; }
 
         public DbSet<Artist> Artists { get; set; }
