@@ -64,6 +64,8 @@ namespace PRJ666_G7_Project.Controllers
                 cfg.CreateMap<Employee, EmployeeBaseViewModel>();
                 cfg.CreateMap<Employee, EmployeeScheduleViewModel>();
 
+                cfg.CreateMap<EmployeeScheduleViewModel, Shift>();
+
                 cfg.CreateMap<Shift, ShiftBaseViewModel>();
                 cfg.CreateMap<Shift, ShiftWithDetailViewModel>();
                 cfg.CreateMap<ShiftAddViewModel, Shift>();
@@ -108,6 +110,11 @@ namespace PRJ666_G7_Project.Controllers
             return mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeBaseViewModel>>(ds.Employees);
         }
 
+        public IEnumerable<EmployeeScheduleViewModel> EmpGetAllWithShift()
+        {
+            var emp = ds.Employees.Include("Shifts").OrderBy(t => t.UserName);          
+            return mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeScheduleViewModel>>(emp);
+        }
         public EmployeeBaseViewModel EmpGetByUserName(string userName)
         {
             var obj = ds.Employees.SingleOrDefault(e => e.UserName == userName);

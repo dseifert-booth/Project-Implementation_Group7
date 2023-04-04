@@ -22,3 +22,23 @@ select,
 textarea {
     max-width: 280px;
 }
+
+#overrideBS .table-bordered {
+    border-radius: 10px;
+    border:2px solid black;
+}
+/*.table.text-center.table-bordered.table-striped.table-hover tr:hover {
+    background-color: red; 
+}*/
+.modal-footer{
+    align-content:center;
+}
+.RadioButt {
+    background-color:aqua;
+}
+.addshiftbtn{
+    color: red;
+}
+.navigationText {
+    color: green;
+}

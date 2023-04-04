@@ -1,7 +1,15 @@
-﻿@model IEnumerable<PRJ666_G7_Project.Models.ShiftBaseViewModel>
+﻿@model IEnumerable<PRJ666_G7_Project.Models.EmployeeScheduleViewModel>
 
 @{
     ViewBag.Title = "All Shifts";
+    var monday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday);
+    var tuesday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Tuesday);
+    var wednesday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Wednesday);
+    var thursday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Thursday);
+    var friday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Friday);
+    var saturday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Saturday);
+    var sunday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Sunday);
+
 }
 
 <h2>@ViewBag.Title</h2>
@@ -9,33 +17,42 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.ShiftStart)
+<table id="overrideBS" class="table text-center table-bordered table-striped" >
+    <tr >   
+        <th class="text-center">
+            Employee name
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ShiftEnd)
+        <th class="text-center">
+            @sunday.ToString("dddd") @sunday.ToString("dd")
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Employees)
+        <th class="text-center">
+            @monday.ToString("dddd") @monday.ToString("dd")
         </th>
-        <th></th>
+        <th class="text-center">
+            @tuesday.ToString("dddd") @tuesday.ToString("dd")
+        </th>
+        <th class="text-center">
+            @wednesday.ToString("dddd") @wednesday.ToString("dd")
+        </th>
+        <th class="text-center">
+            @thursday.ToString("dddd") @thursday.ToString("dd")
+        </th>
+        <th class="text-center">
+            @friday.ToString("dddd") @friday.ToString("dd")
+        </th>
+        <th class="text-center">
+            @saturday.ToString("dddd") @saturday.ToString("dd")
+        </th>
+        
     </tr>
 
 @foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.ShiftStart)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ShiftEnd)
-        </td>
-        <td>
+<tr>
+    @*<td>
             @if (item.Employees.Count() == 0)
             {
                 <p>No employees set!</p>
-            } 
+            }
             else
             {
                 <ul>
@@ -45,19 +62,103 @@
                     }
                 </ul>
             }
-        </td>
-        <td>
-            @if (ViewBag.UserAuthLevel > 1)
-            {
-                <span>@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |</span>
-            }
-            @Html.ActionLink("Details", "Details", new { id = item.Id })
-            @if (ViewBag.UserAuthLevel > 1)
-            {
-                <span>| @Html.ActionLink("Delete", "Delete", new { id = item.Id })</span>
-            }
-        </td>
-    </tr>
+        </td>*@
+
+    <td>
+        @item.FullName
+    </td>
+
+
+    @foreach (var shifts in item.ShiftsWeekly)
+        {
+            <td>
+                @*<span>@Html.ActionLink("+", "Edit", new { id = item.Id }) </span> <br />*@
+                <button type="button" class="btn addshiftbtn" data-toggle="modal" data-target="#AddShiftModal" data-id="@item.Id" data-shiftday="@shifts.ShiftsDate" name="">+</button>
+                
+                @foreach (var shift in shifts.ShiftsDaily)
+                    {
+                            
+                            @shift.ShiftStart.ToString("H:mm")
+                            <text> - </text>
+                            @shift.ShiftEnd.ToString("H:mm tt")
+                    <br >
+                    }
+            </td>
+        }
+
+
+</tr>
+
 }
 
 </table>
+
+<form method="post" asp-action="Index" asp-controller="Home">
+    <div id="AddShiftModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">Add New Shift</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend" id="button-addon3">
+                            <button class="btn btn-outline-secondary" type="button">8am - 4pm</button>
+                            <button class="btn btn-outline-secondary" type="button">9am - 5pm</button>
+                            <button class="btn btn-outline-secondary" type="button">10am - 6pm</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class='col-sm-6'>
+                            <div class="form-group">
+                                <div class='input-group date' >
+                                    <input type='datetime-local' class="form-control"  id='ShiftStartNew' />
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class='col-sm-6'>
+                        <div class="form-group">
+                            <div class='input-group date' >
+                                <input type='datetime-local' class="form-control" id='ShiftEndNew'/>
+                               
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        //console.log("here");
+        var my_id_value = 0;
+        var my_shiftday;
+        //$('#ShiftStartNew').datetimepicker();
+        $(".addshiftbtn").click(function () {
+            //console.log("here2");
+            my_id_value = $(this).data('id');
+            my_shiftday = $(this).data('shiftday');
+            console.log(my_id_value);
+            console.log(my_shiftday);
+            $('#ShiftStartNew').val("1997-12-19T16:39:57");
+            
+        })
+    });
+</script>

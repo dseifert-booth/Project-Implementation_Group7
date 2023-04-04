@@ -31,6 +31,17 @@ namespace PRJ666_G7_Project.Models
 
         public IEnumerable<Shift> Shifts { get; set; }
 
+        //public List<List<Shift>> ShiftsWeekly { get; set; }
+        public List<EmployeeShiftsWeekly> ShiftsWeekly { get; set; }
+
+    }
+
+    public class EmployeeShiftsWeekly
+    {
+        [Key]
+        public int Id { get; set; }
+        public DateTime ShiftsDate { get; set; }
+        public List<Shift> ShiftsDaily { get; set; }
     }
 
     public class EmployeeScheduleEditFormViewModel

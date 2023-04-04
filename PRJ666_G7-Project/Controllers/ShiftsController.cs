@@ -20,8 +20,35 @@ namespace PRJ666_G7_Project.Controllers
         // GET: Shifts
         public ActionResult Index()
         {
+            
+            var sunday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Sunday); //first day of ythe week
+
+            //ViewBag.UserAuthLevel = m.EmpGetByUserName(m.User.Name).AuthLevel;
+            //return View(m.ShiftGetAll());
             ViewBag.UserAuthLevel = m.EmpGetByUserName(m.User.Name).AuthLevel;
-            return View(m.ShiftGetAll());
+            var employees = m.EmpGetAllWithShift();
+            foreach (var employee in employees)
+            {
+                employee.ShiftsWeekly = new List<EmployeeShiftsWeekly>();
+                for (int i = 0; i < 7; i++) 
+                {
+                    EmployeeShiftsWeekly sd = new EmployeeShiftsWeekly();
+                    var day = sunday.AddDays(i);
+                    sd.ShiftsDate = day;
+                    List<Shift> shiftsDaily = new List<Shift>();
+                    foreach (var shift in employee.Shifts)
+                    {
+                        if(shift.ShiftStart.Date == day.Date)
+                        {
+                            shiftsDaily.Add(shift);
+                        }
+                    }
+                    sd.ShiftsDaily = shiftsDaily;
+                    employee.ShiftsWeekly.Add(sd);
+                }              
+            }
+
+            return View(employees);
         }
 
         // GET: Shifts/Details/5

@@ -10,14 +10,19 @@
     <title>@ViewBag.Title - PRJ666_G7-Project</title>
 
     @Styles.Render("~/Content/css")
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" />
     @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
     @{
         var userAccount = new PRJ666_G7_Project.Controllers.RequestUser(User as System.Security.Claims.ClaimsPrincipal);
         var UserAuthLevel = 0;
     }
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <div name= "MainHeader" class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -28,7 +33,7 @@
                 @Html.ActionLink("WSMT", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
+                <ul class="nav navbar-nav navigationText">
                     <li>@Html.ActionLink("My Schedule", "Schedule", "Employees", new { username = User.Identity.Name }, null)</li>
                     <li>@Html.ActionLink("Manage Schedule", "Index", "Shifts")</li>
                     <li>@Html.ActionLink("My Organization", "Index", "Employees")</li>
@@ -46,8 +51,7 @@
         </footer>
     </div>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
+    
     @RenderSection("scripts", required: false)
 </body>
 </html>
