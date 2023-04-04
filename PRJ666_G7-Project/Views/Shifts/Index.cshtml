@@ -73,14 +73,15 @@
         {
             <td>
                 @*<span>@Html.ActionLink("+", "Edit", new { id = item.Id }) </span> <br />*@
-                <button type="button" class="btn addshiftbtn" data-toggle="modal" data-target="#AddShiftModal" data-id="@item.Id" data-shiftday="@shifts.ShiftsDate" name="">+</button>
+                <button type="button" class="btn addshiftbtn" data-toggle="modal" data-target="#AddShiftModal" data-id="@item.UserName" data-shiftday="@shifts.ShiftsDate" name="">+</button>
                 
                 @foreach (var shift in shifts.ShiftsDaily)
                     {
-                            
+                            <a hreff="#"class="edditShiftbtn" data-toggle="modal" data-target="#AddShiftModal" data-id="@item.UserName" data-shiftStartDateTime="@shift.ShiftStart" data-shiftEndDateTime="@shift.ShiftEnd" data-shiftId="@shifts.Id">
                             @shift.ShiftStart.ToString("H:mm")
                             <text> - </text>
                             @shift.ShiftEnd.ToString("H:mm tt")
+                            </a>
                     <br >
                     }
             </td>
@@ -93,12 +94,12 @@
 
 </table>
 
-<form method="post" asp-action="Index" asp-controller="Home">
+<form method="post" action="/Shifts/create" >
     <div id="AddShiftModal" class="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2 class="modal-title">Add New Shift</h2>
+                    <h2 class="modal-title"><span id="addpopupheader1">Shift for the date </span><span id="addpopupheader2"></span> </h2>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -115,27 +116,31 @@
                     <div class="row">
                         <div class='col-sm-6'>
                             <div class="form-group">
-                                <div class='input-group date' >
-                                    <input type='datetime-local' class="form-control"  id='ShiftStartNew' />
-                                    
+                                <div class='input-group date'>
+                                    <input type='datetime-local' class="form-control" id='ShiftStartNewDraft' name='ShiftStartNewDraft' />
+
                                 </div>
                             </div>
                         </div>
-                        
+
                     </div>
                     <div class='col-sm-6'>
                         <div class="form-group">
-                            <div class='input-group date' >
-                                <input type='datetime-local' class="form-control" id='ShiftEndNew'/>
-                               
+                            <div class='input-group date'>
+                                <input type='datetime-local' class="form-control" id='ShiftEndNewDraft' name='ShiftEndNewDraft' />
+
                             </div>
                         </div>
                     </div>
 
-
+                    <input type="hidden" name="EmployeeUserNames" id="EmployeeUserNames" value="something" />
+                    <input type="hidden" name="ShiftStart" id="ShiftStart" value="something" />
+                    <input type="hidden" name="ShiftEnd" id="ShiftEnd" value="something" />
+                    @*<input type="hidden" name="TaskIds" value="1" />*@
+                    @Html.AntiForgeryToken();
 
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Save changes</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
                 </div>
@@ -150,15 +155,60 @@
         //console.log("here");
         var my_id_value = 0;
         var my_shiftday;
+        var my_shiftid;
+        var my_shiftdayInDate;
+        var my_shiftdayInDateFormatted;
         //$('#ShiftStartNew').datetimepicker();
         $(".addshiftbtn").click(function () {
             //console.log("here2");
             my_id_value = $(this).data('id');
             my_shiftday = $(this).data('shiftday');
+            my_shiftid = $(this).data('shiftid');
             console.log(my_id_value);
             console.log(my_shiftday);
-            $('#ShiftStartNew').val("1997-12-19T16:39:57");
+            console.log(my_shiftid);
+
             
-        })
+            try {
+                my_shiftdayInDate = new Date(my_shiftday);
+                my_shiftdayInDateFormatted = my_shiftdayInDate.getFullYear() + "-" + (my_shiftdayInDate.getMonth() + 1) + "-"+my_shiftdayInDate.getDate();
+                console.log(my_shiftdayInDate.toString("YYYY-MM-DD"));
+                console.log(my_shiftdayInDateFormatted);
+            }
+            catch (e) {
+
+            }
+
+            $('#EmployeeUserNames').val(my_id_value);
+
+            if (my_shiftid) {
+                // edit mode
+                $('#addpopupheader1').html = "Edit Shift for the date ";
+                $('#addpopupheader2').html = my_shiftday;
+                $('#ShiftStartNewDraft').attr("type", "datetime-local");
+                $('#ShiftEndNewDraft').attr("type", "datetime-local");
+                $('#ShiftEndNewDraft').attr("type", "datetime-local");
+            } else {
+                //add mode
+                $('#addpopupheader1').html = "Add New Shift for the date ";
+                $('#addpopupheader2').html = my_shiftday;
+                $('#ShiftStartNewDraft').attr("type", "time");
+                $('#ShiftEndNewDraft').attr("type", "time");
+            }
+
+            $('#ShiftStartNew').val("1997-12-19T16:39:57");
+            //$('#ShiftEndNew').attr("type", "time");
+        });
+
+        $("#ShiftStartNewDraft").change(function () {
+            console.log($(this).val());
+            let startdate = my_shiftdayInDateFormatted + "T" + $(this).val();
+            $('#ShiftStart').val(startdate);
+        });
+        $("#ShiftEndNewDraft").change(function () {
+            console.log($(this).val());
+            let enddate = my_shiftdayInDateFormatted + "T" + $(this).val();
+            $('#ShiftEnd').val(enddate);
+        });
     });
 </script>

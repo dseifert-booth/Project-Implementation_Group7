@@ -110,7 +110,7 @@ namespace PRJ666_G7_Project.Controllers
             }
             else
             {
-                return RedirectToAction("Details", "Shifts", new { id = addedItem.Id });
+                return RedirectToAction("Index", "Shifts", new { id = addedItem.Id });
             }
         }
 

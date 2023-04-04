@@ -200,14 +200,14 @@ namespace PRJ666_G7_Project.Controllers
         public ShiftWithDetailViewModel ShiftAdd(ShiftAddViewModel newShift)
         {
 
-            ICollection<Task> tasks = new HashSet<Task>();
+            //ICollection<Task> tasks = new HashSet<Task>();
             ICollection<Employee> employees = new HashSet<Employee>();
 
-            foreach (var taskId in newShift.TaskIds)
-            {
-                var task = ds.Tasks.Find(taskId);
-                tasks.Add(task);
-            }
+            //foreach (var taskId in newShift.TaskIds)
+            //{
+            //    var task = ds.Tasks.Find(taskId);
+            //    tasks.Add(task);
+            //}
 
             foreach (var userName in newShift.EmployeeUserNames)
             {
@@ -215,15 +215,15 @@ namespace PRJ666_G7_Project.Controllers
                 employees.Add(emp);
             }
 
-            if (tasks.Count == 0)
-            {
-                return null;
-            }
-            else
-            {
+            //if (tasks.Count == 0)
+            //{
+            //    return null;
+            //}
+            //else
+            //{
                 var addedItem = ds.Shifts.Add(mapper.Map<ShiftAddViewModel, Shift>(newShift));
 
-                addedItem.Tasks = tasks;
+                //addedItem.Tasks = tasks;
 
                 addedItem.Employees = employees;
 
@@ -232,7 +232,7 @@ namespace PRJ666_G7_Project.Controllers
                 ds.SaveChanges();
 
                 return (addedItem == null) ? null : mapper.Map<Shift, ShiftWithDetailViewModel>(addedItem);
-            }
+            //}
         }
 
 
@@ -244,7 +244,7 @@ namespace PRJ666_G7_Project.Controllers
             var isManager = HttpContext.Current.User.IsInRole("Manager");
             var isEmployee = HttpContext.Current.User.IsInRole("Employee");
 
-            var obj = ds.Shifts.Include("Employees").Include("Tasks").SingleOrDefault(a => a.Id == shift.Id);
+            var obj = ds.Shifts.Include("Employees")/*.Include("Tasks")*/.SingleOrDefault(a => a.Id == shift.Id);
 
             if (obj == null)
             {
@@ -255,32 +255,33 @@ namespace PRJ666_G7_Project.Controllers
                 if (isSuperAdmin || isAdmin || isManager)
                 {
 
-                    ICollection<Task> tasks = new HashSet<Task>();
+                    //ICollection<Task> tasks = new HashSet<Task>();
 
-                    foreach (var taskId in shift.TaskIds)
-                    {
-                        var task = ds.Tasks.Find(taskId);
-                        tasks.Add(task);
-                    }
+                    //foreach (var taskId in shift.TaskIds)
+                    //{
+                    //    var task = ds.Tasks.Find(taskId);
+                    //    tasks.Add(task);
+                    //}
 
-                    obj.Tasks = tasks;
+                    //obj.Tasks = tasks;
 
                     if (shift.ShiftStart != null) obj.ShiftStart = (DateTime)shift.ShiftStart;
                     if (shift.ShiftEnd != null) obj.ShiftEnd = (DateTime)shift.ShiftEnd;
                 } 
                 else if (isEmployee)
                 {
-                    bool found;
-                    foreach(var task in obj.Tasks)
-                    {
-                        found = false;
-                        foreach (var taskId in shift.TaskIds) if (task.Id == taskId)
-                            {
-                                task.Complete = true;
-                                found = true;
-                            }
-                        if (!found) task.Complete = false; 
-                    }
+                    //bool found;
+                    //foreach(var task in obj.Tasks)
+                    //{
+                    //    found = false;
+                    //    foreach (var taskId in shift.TaskIds) 
+                    //        if (task.Id == taskId)
+                    //        {
+                    //            task.Complete = true;
+                    //            found = true;
+                    //        }
+                    //    if (!found) task.Complete = false; 
+                    //}
 
                     obj.ClockInTime = shift.ClockInTime;
                     obj.ClockOutTime = shift.ClockOutTime;
