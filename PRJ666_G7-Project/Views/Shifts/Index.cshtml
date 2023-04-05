@@ -77,7 +77,7 @@
                 
                 @foreach (var shift in shifts.ShiftsDaily)
                     {
-                            <a hreff="#"class="edditShiftbtn" data-toggle="modal" data-target="#AddShiftModal" data-id="@item.UserName" data-shiftStartDateTime="@shift.ShiftStart" data-shiftEndDateTime="@shift.ShiftEnd" data-shiftId="@shifts.Id">
+                            <a hreff="#" class="edditShiftbtn" data-toggle="modal" data-target="#AddShiftModal" data-shiftday="@shifts.ShiftsDate" data-shiftStartDateTime="@shift.ShiftStart" data-shiftEndDateTime="@shift.ShiftEnd" data-shiftId="@shift.Id">
                             @shift.ShiftStart.ToString("H:mm")
                             <text> - </text>
                             @shift.ShiftEnd.ToString("H:mm tt")
@@ -94,7 +94,7 @@
 
 </table>
 
-<form method="post" action="/Shifts/create" >
+<form method="post" action="/Shifts/create" id="shiftEditForm">
     <div id="AddShiftModal" class="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -108,9 +108,9 @@
 
                     <div class="input-group mb-3">
                         <div class="input-group-prepend" id="button-addon3">
-                            <button class="btn btn-outline-secondary" type="button">8am - 4pm</button>
-                            <button class="btn btn-outline-secondary" type="button">9am - 5pm</button>
-                            <button class="btn btn-outline-secondary" type="button">10am - 6pm</button>
+                            <button class="btn btn-outline-secondary prefillShiftBtn" type="button" data-from="08" data-to="16">8am - 4pm</button>
+                            <button class="btn btn-outline-secondary prefillShiftBtn" type="button" data-from="09" data-to="17">9am - 5pm</button>
+                            <button class="btn btn-outline-secondary prefillShiftBtn" type="button" data-from="10" data-to="18">10am - 6pm</button>
                         </div>
                     </div>
                     <div class="row">
@@ -136,12 +136,18 @@
                     <input type="hidden" name="EmployeeUserNames" id="EmployeeUserNames" value="something" />
                     <input type="hidden" name="ShiftStart" id="ShiftStart" value="something" />
                     <input type="hidden" name="ShiftEnd" id="ShiftEnd" value="something" />
+                    <input type="hidden" name="Id" id="Id" value="" />
                     @*<input type="hidden" name="TaskIds" value="1" />*@
                     @Html.AntiForgeryToken();
 
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Save</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <div>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-secondary deleteshiftbtn" data-dismiss="modal">Delete</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -158,22 +164,29 @@
         var my_shiftid;
         var my_shiftdayInDate;
         var my_shiftdayInDateFormatted;
+        var my_shiftStartDateTime;
+        var my_shiftEndDateTime;
+        var my_shiftId;
         //$('#ShiftStartNew').datetimepicker();
         $(".addshiftbtn").click(function () {
             //console.log("here2");
+
+            //add mode
+            $('#shiftEditForm').attr("action", "/Shifts/create");
+
             my_id_value = $(this).data('id');
             my_shiftday = $(this).data('shiftday');
             my_shiftid = $(this).data('shiftid');
-            console.log(my_id_value);
-            console.log(my_shiftday);
-            console.log(my_shiftid);
+           // console.log(my_id_value);
+            //console.log(my_shiftday);
+            //console.log(my_shiftid);
 
-            
+
             try {
                 my_shiftdayInDate = new Date(my_shiftday);
-                my_shiftdayInDateFormatted = my_shiftdayInDate.getFullYear() + "-" + (my_shiftdayInDate.getMonth() + 1) + "-"+my_shiftdayInDate.getDate();
-                console.log(my_shiftdayInDate.toString("YYYY-MM-DD"));
-                console.log(my_shiftdayInDateFormatted);
+                my_shiftdayInDateFormatted = formatDate(my_shiftdayInDate);//my_shiftdayInDate.getFullYear() + "-" + (my_shiftdayInDate.getMonth() + 1) + "-"+my_shiftdayInDate.getDate();
+                //console.log(my_shiftdayInDate.toString("YYYY-MM-DD"));
+                //console.log(my_shiftdayInDateFormatted);
             }
             catch (e) {
 
@@ -181,34 +194,122 @@
 
             $('#EmployeeUserNames').val(my_id_value);
 
-            if (my_shiftid) {
-                // edit mode
-                $('#addpopupheader1').html = "Edit Shift for the date ";
-                $('#addpopupheader2').html = my_shiftday;
-                $('#ShiftStartNewDraft').attr("type", "datetime-local");
-                $('#ShiftEndNewDraft').attr("type", "datetime-local");
-                $('#ShiftEndNewDraft').attr("type", "datetime-local");
-            } else {
-                //add mode
-                $('#addpopupheader1').html = "Add New Shift for the date ";
-                $('#addpopupheader2').html = my_shiftday;
-                $('#ShiftStartNewDraft').attr("type", "time");
-                $('#ShiftEndNewDraft').attr("type", "time");
-            }
+            
+            
+            $('#addpopupheader1').html = "Add New Shift for the date ";
+            $('#addpopupheader2').html = my_shiftday;
+            $('#ShiftStartNewDraft').attr("type", "time");
+            $('#ShiftEndNewDraft').attr("type", "time");
 
-            $('#ShiftStartNew').val("1997-12-19T16:39:57");
+            
+
+            //$('#ShiftStartNew').val("1997-12-19T16:39:57");
             //$('#ShiftEndNew').attr("type", "time");
         });
 
+
         $("#ShiftStartNewDraft").change(function () {
             console.log($(this).val());
-            let startdate = my_shiftdayInDateFormatted + "T" + $(this).val();
+            let startdate = my_shiftId ? $(this).val() : my_shiftdayInDateFormatted + "T" + $(this).val() ;
             $('#ShiftStart').val(startdate);
         });
+
+
         $("#ShiftEndNewDraft").change(function () {
             console.log($(this).val());
-            let enddate = my_shiftdayInDateFormatted + "T" + $(this).val();
+            let enddate = my_shiftId ? $(this).val() : my_shiftdayInDateFormatted + "T" + $(this).val();
             $('#ShiftEnd').val(enddate);
+        });
+
+   
+        $(".edditShiftbtn").click(function () {
+            // edit mode
+
+            $('#shiftEditForm').attr("action", "/Shifts/edit");
+
+            my_shiftStartDateTime = new Date($(this).attr("data-shiftStartDateTime"));
+            my_shiftEndDateTime = new Date($(this).attr("data-shiftEndDateTime"));
+            my_shiftId = $(this).attr("data-shiftId");
+            my_shiftday = $(this).attr("data-shiftday");
+            //console.log(my_shiftStartDateTime);
+            //console.log(my_shiftEndDateTime);
+            //console.log(my_shiftId);
+
+            try {
+                my_shiftdayInDate = new Date(my_shiftday);
+                my_shiftdayInDateFormatted = formatDate(my_shiftdayInDate);//my_shiftdayInDate.getFullYear() + "-" + (my_shiftdayInDate.getMonth() + 1) + "-"+my_shiftdayInDate.getDate();
+                //console.log(my_shiftdayInDate.toString("YYYY-MM-DD"));
+                //console.log(my_shiftdayInDateFormatted);
+            }
+            catch (e) {
+
+            }
+           
+            $('#addpopupheader1').html = "Edit Shift for the date ";
+            $('#addpopupheader2').html = my_shiftday;
+            $('#ShiftStartNewDraft').attr("type", "datetime-local");
+            $('#ShiftEndNewDraft').attr("type", "datetime-local");
+            $('#ShiftEndNewDraft').attr("type", "datetime-local");
+
+            $('#ShiftStartNewDraft').val(formatDateTime(my_shiftStartDateTime));
+            $('#ShiftEndNewDraft').val(formatDateTime(my_shiftEndDateTime));
+
+            $('#ShiftStart').val(formatDateTime(my_shiftStartDateTime));
+            $('#ShiftEnd').val(formatDateTime(my_shiftEndDateTime));
+
+            //$('#ShiftStartNewDraft').val("2023-04-02T17:20:00");
+            //2023-4-2T17:20 action="/Shifts/create"
+
+            
+
+            $('#Id').val(my_shiftId);
+
+        });
+
+        $(".deleteshiftbtn").click(function () {
+            //delete
+            $('#shiftEditForm').attr("action", "/Shifts/delete");
+            //my_shiftId = $(this).attr("data-shiftId");
+            //$('#Id').val(my_shiftId);
+            $('#shiftEditForm').submit();
+        });
+
+        function formatDate(dt) {
+            let month = "0" + (dt.getMonth() + 1);
+            let day = "0" + dt.getDate().toString();
+            return dt.getFullYear() + "-" + month.substr(month.length - 2) + "-" + day.substr(day.length - 2);
+        };
+
+        function formatDateTime(dt) {
+            let month = "0" + (dt.getMonth() + 1);
+            let day = "0" + dt.getDate().toString();
+            let hour = "0" + dt.getHours().toString();
+            let minute = "0" + dt.getMinutes().toString();
+            let fdate = dt.getFullYear() + "-" + month.substr(month.length - 2) + "-" + day.substr(day.length - 2) + "T" + hour.substr(hour.length - 2) + ":" + minute.substr(minute.length - 2)
+            //console.log("fdate",fdate);
+            return fdate;
+        };
+
+        $(".prefillShiftBtn").click(function () {
+            let from = $(this).data('from');
+            let to = $(this).data('to');
+            console.log(from);
+            console.log(to);
+
+            if (my_shiftId) {
+                //edit
+                let newStart = my_shiftdayInDateFormatted + "T" + from + ":00";
+                let newEnd = my_shiftdayInDateFormatted + "T" + to + ":00";
+                $('#ShiftStartNewDraft').val(newStart);
+                $('#ShiftEndNewDraft').val(newEnd);
+            } else {
+                //add               
+                $('#ShiftStartNewDraft').val(from + ":00");
+                $('#ShiftEndNewDraft').val(to + ":00");
+      
+            }
+            $("#ShiftStartNewDraft").trigger("change");
+            $('#ShiftEndNewDraft').trigger("change");
         });
     });
 </script>

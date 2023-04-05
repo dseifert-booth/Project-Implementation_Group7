@@ -161,11 +161,11 @@ namespace PRJ666_G7_Project.Controllers
 
             if (editedItem == null)
             {
-                return RedirectToAction("Edit", new { id = shift.Id });
+                return RedirectToAction("Index", new { id = shift.Id });
             }
             else
             {
-                return RedirectToAction("Details", "Shifts", new { id = shift.Id });
+                return RedirectToAction("Index", "Shifts", new { id = shift.Id });
             }
         }
 
