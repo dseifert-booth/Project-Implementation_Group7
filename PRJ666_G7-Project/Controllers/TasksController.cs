@@ -20,7 +20,7 @@ namespace PRJ666_G7_Project.Controllers
         public ActionResult Index()
         {
             TaskIndexViewModel viewModel = new TaskIndexViewModel();
-            viewModel.TaskList = db.Tasks.Include("Employee").ToList();
+            viewModel.TaskList = db.Tasks.Include("Employee").ToList().OrderBy(x=> x.Deadline);
             //var employees = m.EmpGetAll();
 
             //foreach (var employee in employees)
@@ -73,7 +73,7 @@ namespace PRJ666_G7_Project.Controllers
 
             if (addedItem == null)
             {
-                return View(newItem);
+                return View(addedItem);
             }
             else
             {
@@ -110,15 +110,41 @@ namespace PRJ666_G7_Project.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Description,Complete")] Task task)
+        public ActionResult Edit(TaskEditViewModel updatedItem)
         {
-            if (ModelState.IsValid)
+            // Validate the input
+            if (!ModelState.IsValid)
             {
-                db.Entry(task).State = EntityState.Modified;
-                db.SaveChanges();
+                return View(updatedItem);
+            }
+
+            // Process the input
+            if (updatedItem.CompleteChbx == "on")
+            {
+                updatedItem.Complete = true;
+            }
+            else
+            {
+                updatedItem.Complete = false;
+            }
+
+            var addedItem = m.TaskEdit(updatedItem);
+
+            if (addedItem == null)
+            {
+                return View(updatedItem);
+            }
+            else
+            {
                 return RedirectToAction("Index");
             }
-            return View(task);
+            //if (ModelState.IsValid)
+            //{
+            //    db.Entry(task).State = EntityState.Modified;
+            //    db.SaveChanges();
+            //    return RedirectToAction("Index");
+            //}
+            //return View(task);
         }
 
         // GET: Tasks/Delete/5

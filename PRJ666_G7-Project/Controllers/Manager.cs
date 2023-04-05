@@ -328,36 +328,62 @@ namespace PRJ666_G7_Project.Controllers
         }
 
         public Task TaskAdd(TaskAddViewModel newTask)
-        {
-
-           
+        {         
             Employee employee = null;
             if (!string.IsNullOrEmpty (newTask.EmployeeUserName))
             {
                 employee = EmpGetByUserNameEmp(newTask.EmployeeUserName);
             }
 
-            //var emp = ds.Employees.Where(a => a.UserName == userName).SingleOrDefault();
-            //employees.Add(emp);
             var added = ds.Tasks.Add(mapper.Map<TaskAddViewModel, Task>(newTask));
             if (employee != null)
             {
                 added.Employee = employee;
             }
 
-
-           
-
-
-
-            //addedItem.Employees = employees;
-
-            //addedItem.Manager = HttpContext.Current.User.Identity.Name;
-
             ds.SaveChanges();
 
             return (added == null) ? null : added;
-            //}
+        }
+
+        public Task TaskEdit(TaskEditViewModel newTask)
+        {
+            var obj = ds.Tasks.Include("Employee").SingleOrDefault(a => a.Id == newTask.Id);
+
+            if (obj == null)
+            {
+                return null;
+            }
+            else
+            {
+                Employee employee = null;
+                if (!string.IsNullOrEmpty(newTask.EmployeeUserName))
+                {
+                    employee = EmpGetByUserNameEmp(newTask.EmployeeUserName);
+                }
+
+                //var added = ds.Tasks.Add(mapper.Map<TaskAddViewModel, Task>(newTask));
+                if (employee == null)
+                {
+                    obj.Employee = null;
+                }
+                else
+                {
+                    obj.Employee = employee;
+                }
+
+                obj.Name = newTask.Name;
+                obj.Description = newTask.Description;
+                obj.Deadline = (DateTime)newTask.Deadline;
+                obj.Complete = newTask.Complete;
+                
+
+                ds.SaveChanges();
+
+                return (obj == null) ? null : obj;
+            }
+
+            
         }
 
         #endregion

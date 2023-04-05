@@ -64,4 +64,20 @@ namespace PRJ666_G7_Project.Models
         
         public DateTime Deadline { get; set; }
     }
+
+    public class TaskEditViewModel
+    {
+        [Required, StringLength(100)]
+        public string Name { get; set; }
+
+        [StringLength(10000)]
+        public string Description { get; set; }
+
+        public string EmployeeUserName { get; set; }
+        public int Id { get; set; }
+        public bool Complete { get; set; }
+        public string CompleteChbx { get; set; }
+
+        public DateTime Deadline { get; set; }
+    }
 }

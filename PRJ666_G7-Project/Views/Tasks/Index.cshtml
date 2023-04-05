@@ -12,6 +12,7 @@
 <a hreff="#" class="createTaskbtn" data-toggle="modal" data-target="#AddTaskModal">
     Create New
 </a>
+
 <form method="post" action="/Tasks/Create" id="TaskEdditForm">
     <div id="AddTaskModal" class="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
@@ -27,14 +28,14 @@
                     <div class="input-group mb-3">
                         <div class="input-group-prepend" id="button-addon3">
                             Name:<br />
-                            <input type='text' name="Name" />
+                            <input type='text' name="Name" id="Name" />
                         </div>
                     </div>
                     <br />
                     <div class="input-group mb-3">
                         <div class="input-group-prepend" id="button-addon3">
                             Description:<br />
-                            <input type='text' name="Description" />
+                            <input type='text' name="Description" id="Description" />
                         </div>
                     </div>
                     <br />
@@ -43,13 +44,20 @@
                             <div class="form-group">
                                 <div class='input-group date'>
                                     Deadline:
-                                    <input type='datetime-local' class="form-control" id='' name='Deadline' />
+                                    <input type='datetime-local' class="form-control" id='Deadline' name='Deadline' />
 
                                 </div>
                             </div>
                         </div>
 
                     </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend" id="completedBlock">
+                            Completed:<br />
+                            <input type='checkbox' name="CompleteChbx" id="CompleteChbx"/>
+                        </div>
+                    </div>
+                    
                     <div class="input-group mb-3">
                         <div class="input-group-prepend" id="button-addon3">
                             Assign employee:<br />
@@ -106,7 +114,7 @@
 
     @foreach (var item in Model.TaskList)
     {
-        <tr>
+        <tr  class="@(item.Deadline < DateTime.Now? "outdatedtasks": item.Deadline < DateTime.Now.AddDays(1)? "taskduetoday" : "normalduetasks")">
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
@@ -123,7 +131,7 @@
                 @Html.DisplayFor(modelItem => item.Complete)
             </td>
             <td>
-                <a hreff="#" class="editTaskbtn" data-toggle="modal" data-target="#AddTaskModal" data-taskid="@item.Id" data-taskDesc="@item.Description" data-taskDeadline="@item.Deadline" data->Edit</a>
+                <a hreff="#" class="editTaskbtn" data-toggle="modal" data-target="#AddTaskModal" data-taskid="@item.Id" data-taskDesc="@item.Description" data-taskDeadline="@item.Deadline" data-taskUsername="@(item.Employee?.UserName)" data-taskName="@item.Name" data-taskCompleted="@item.Complete">Edit</a>
                 @Html.ActionLink("Delete", "Delete", new { id = item.Id })
             </td>
         </tr>
@@ -132,12 +140,53 @@
 </table>
 <script type="text/javascript">
     $(document).ready(function () {
-        var my_taskId;
+        $(".createTaskbtn").click(function () {
+            $('#completedBlock').css('display', 'none');
+            $('#Id').val("");
+            $('#Name').val("");
+            $('#Description').val("");
+            $('#Deadline').val("");
+            $('#CompleteChbx').prop('checked', false); EmployeeUserName
+            $('#EmployeeUserName').val("");
+        });
+
+
         $(".editTaskbtn").click(function () {
             $('#TaskEdditForm').attr("action", "/Tasks/Edit");
-            my_taskId = $(this).attr("data-taskid");
+            let my_taskId = $(this).attr("data-taskid");
+            let my_taskCompleted = $(this).attr("data-taskCompleted");
+            let my_taskDesc = $(this).attr("data-taskDesc");
+            let my_taskDeadline = $(this).attr("data-taskDeadline");
+            let my_taskUsername = $(this).attr("data-taskUsername");
+            let my_taskName = $(this).attr("data-taskName");
 
+            $('#Name').val(my_taskName);
+            $('#Description').val(my_taskDesc);
+            $('#Deadline').val(formatDateTime(new Date(my_taskDeadline)));
             $('#Id').val(my_taskId);
+
+            //set completed section and checkbox
+            $('#completedBlock').css('display', 'block');
+            if (my_taskCompleted == "True" || my_taskCompleted == "true") {
+                $('#CompleteChbx').prop('checked', true);
+            }
+            else {
+                $('#CompleteChbx').prop('checked', false);
+            }
+
+            //set employee dropdown
+            $('#EmployeeUserName').val(my_taskUsername);
+            
         });
+
+        function formatDateTime(dt) {
+            let month = "0" + (dt.getMonth() + 1);
+            let day = "0" + dt.getDate().toString();
+            let hour = "0" + dt.getHours().toString();
+            let minute = "0" + dt.getMinutes().toString();
+            let fdate = dt.getFullYear() + "-" + month.substr(month.length - 2) + "-" + day.substr(day.length - 2) + "T" + hour.substr(hour.length - 2) + ":" + minute.substr(minute.length - 2)
+            //console.log("fdate",fdate);
+            return fdate;
+        };
     });
 </script>
