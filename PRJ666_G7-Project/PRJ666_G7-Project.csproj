@@ -299,6 +299,14 @@
     <Compile Include="Migrations\202304040416405_popup.Designer.cs">
       <DependentUpon>202304040416405_popup.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202304051846301_taskUpdate.cs" />
+    <Compile Include="Migrations\202304051846301_taskUpdate.Designer.cs">
+      <DependentUpon>202304051846301_taskUpdate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202304052014251_taskUpdate2.cs" />
+    <Compile Include="Migrations\202304052014251_taskUpdate2.Designer.cs">
+      <DependentUpon>202304052014251_taskUpdate2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\EmployeeViewModels.cs" />
@@ -477,6 +485,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202304040416405_popup.resx">
       <DependentUpon>202304040416405_popup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202304051846301_taskUpdate.resx">
+      <DependentUpon>202304051846301_taskUpdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202304052014251_taskUpdate2.resx">
+      <DependentUpon>202304052014251_taskUpdate2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

@@ -75,6 +75,7 @@ namespace PRJ666_G7_Project.Controllers
                 cfg.CreateMap<Task, TaskBaseViewModel>();
                 cfg.CreateMap<Task, TaskWithDetailViewModel>();
                 cfg.CreateMap<TaskAddViewModel, Task>();
+                cfg.CreateMap<Task, TaskIndexViewModel>();
             });
 
             mapper = config.CreateMapper();
@@ -120,6 +121,12 @@ namespace PRJ666_G7_Project.Controllers
             var obj = ds.Employees.SingleOrDefault(e => e.UserName == userName);
 
             return mapper.Map<Employee, EmployeeBaseViewModel>(obj);
+        }
+        public Employee EmpGetByUserNameEmp(string userName)
+        {
+            var obj = ds.Employees.SingleOrDefault(e => e.UserName == userName);
+
+            return obj;
         }
 
         public EmployeeScheduleViewModel GetEmployeeScheduleByUserName(string userName)
@@ -318,6 +325,39 @@ namespace PRJ666_G7_Project.Controllers
         public IEnumerable<TaskBaseViewModel> TaskGetAll()
         {
             return mapper.Map<IEnumerable<Task>, IEnumerable<TaskBaseViewModel>>(ds.Tasks.OrderBy(a => a.Id));
+        }
+
+        public Task TaskAdd(TaskAddViewModel newTask)
+        {
+
+           
+            Employee employee = null;
+            if (!string.IsNullOrEmpty (newTask.EmployeeUserName))
+            {
+                employee = EmpGetByUserNameEmp(newTask.EmployeeUserName);
+            }
+
+            //var emp = ds.Employees.Where(a => a.UserName == userName).SingleOrDefault();
+            //employees.Add(emp);
+            var added = ds.Tasks.Add(mapper.Map<TaskAddViewModel, Task>(newTask));
+            if (employee != null)
+            {
+                added.Employee = employee;
+            }
+
+
+           
+
+
+
+            //addedItem.Employees = employees;
+
+            //addedItem.Manager = HttpContext.Current.User.Identity.Name;
+
+            ds.SaveChanges();
+
+            return (added == null) ? null : added;
+            //}
         }
 
         #endregion

@@ -48,21 +48,7 @@
 
 @foreach (var item in Model) {
 <tr>
-    @*<td>
-            @if (item.Employees.Count() == 0)
-            {
-                <p>No employees set!</p>
-            }
-            else
-            {
-                <ul>
-                    @foreach (var emp in item.Employees)
-                    {
-                        <li>@emp.FullName</li>
-                    }
-                </ul>
-            }
-        </td>*@
+    
 
     <td>
         @item.FullName
