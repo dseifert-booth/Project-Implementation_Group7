@@ -4,21 +4,20 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<a hreff="#" class="createTaskbtn" data-toggle="modal" data-target="#AddTaskModal">
+
+<br />
+<button class="createTaskbtn" data-toggle="modal" data-target="#AddTaskModal">
     Create New
-</a>
-
+</button>
+<br />
+<br />
 <form method="post" action="/Tasks/Create" id="TaskEdditForm">
     <div id="AddTaskModal" class="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2 class="modal-title">Create New Task </h2>
+                    <h2 class="modal-title"><span id="addpopupheadernew">Create New Task</span></h2>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -78,8 +77,8 @@
 
                     <div class="modal-footer">
                         <div>
-                            <button type="submit" class="btn btn-primary">Save</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary popupbtnsshifts savesfiftbtn">Save</button>
+                            <button type="button" class="btn btn-secondary popupbtnsshifts" data-dismiss="modal">Close</button>
                         </div>
                         
                     </div>
@@ -128,7 +127,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Complete)
             </td>
-            <td>
+            <td class="textmenuecolors">
                 <a hreff="#" class="editTaskbtn" data-toggle="modal" data-target="#AddTaskModal" data-taskid="@item.Id" data-taskDesc="@item.Description" data-taskDeadline="@item.Deadline" data-taskUsername="@(item.Employee?.UserName)" data-taskName="@item.Name" data-taskCompleted="@item.Complete">Edit</a>
                 @Html.ActionLink("Delete", "Delete", new { id = item.Id })
             </td>
@@ -147,6 +146,7 @@
             $('#CompleteChbx').prop('checked', false); EmployeeUserName
             $('#EmployeeUserName').val("");
             $('#TaskEdditForm').attr("action", "/Tasks/Create");
+            $('#addpopupheadernew').html = "Create new Task ";
         });
 
 
@@ -163,6 +163,7 @@
             $('#Description').val(my_taskDesc);
             $('#Deadline').val(formatDateTime(new Date(my_taskDeadline)));
             $('#Id').val(my_taskId);
+            $('#addpopupheadernew').html = "Eddit Task ";
 
             //set completed section and checkbox
             $('#completedBlock').css('display', 'block');

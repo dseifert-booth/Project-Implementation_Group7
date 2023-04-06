@@ -12,11 +12,9 @@
 
 }
 
-<h2>@ViewBag.Title</h2>
+<h2 class="sheduletitle">@ViewBag.Title</h2>
 
-@*<p>
-    @Html.ActionLink("Create New", "Create")
-</p>*@
+
 <table id="overrideBS" class="table text-center table-bordered table-striped" >
     <tr >   
         <th class="text-center">
@@ -101,6 +99,7 @@
                         </div>
                     </div>
                     <br />
+                    <div>
                     <div >
                         <div class='col-sm-6'>
                             <br />
@@ -122,6 +121,7 @@
                             </div>
                         </div>
                     </div>
+                     
 
                     <input type="hidden" name="EmployeeUserNames" id="EmployeeUserNames" value="something" />
                     <input type="hidden" name="ShiftStart" id="ShiftStart" value="something" />
@@ -130,11 +130,11 @@
                     @*<input type="hidden" name="TaskIds" value="1" />*@
                     @Html.AntiForgeryToken()
 
-                    <div class="modal-footer">
+                    <div class="modal-footer ">
                         <div>
-                            <button type="button" class="btn btn-secondary deleteshiftbtn" data-dismiss="modal">Delete</button>
-                            <button type="submit" class="btn btn-primary">Save</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-secondary deleteshiftbtn popupbtnsshifts" data-dismiss="modal">Delete</button>
+                            <button type="submit" class="btn btn-primary popupbtnsshifts savesfiftbtn">Save</button>
+                            <button type="button" class="btn btn-secondary popupbtnsshifts" data-dismiss="modal">Close</button>
 
 
                         </div>
