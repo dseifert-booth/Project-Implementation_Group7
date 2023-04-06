@@ -3,6 +3,13 @@
 
 @{
     ViewBag.Title = Model.FullName + "'s Schedule";
+    var monday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday);
+    var tuesday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Tuesday);
+    var wednesday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Wednesday);
+    var thursday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Thursday);
+    var friday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Friday);
+    var saturday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Saturday);
+    var sunday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Sunday);
 }
 
 <h2>@ViewBag.Title</h2>
@@ -10,14 +17,58 @@
 <hr />
 <dl class="form-horizontal">
     <div class="form-group">
-        @Html.LabelFor(m => m.ShiftList, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.DropDownList("Shift", Model.ShiftList, "Select a shift", htmlAttributes: new { @id = "shift-ddl", @class = "form-control", @onchange = "" })
-            @Html.ValidationMessageFor(model => model.ShiftList, "", new { @class = "text-danger" })
+        <div class="col-md-6">
+            <table id="overrideBS" class="table text-center table-bordered table-striped">
+                <tr>
+                    <th class="text-center">
+                        @sunday.ToString("ddd") @sunday.ToString("dd")
+                    </th>
+                    <th class="text-center">
+                        @monday.ToString("ddd") @monday.ToString("dd")
+                    </th>
+                    <th class="text-center">
+                        @tuesday.ToString("ddd") @tuesday.ToString("dd")
+                    </th>
+                    <th class="text-center">
+                        @wednesday.ToString("ddd") @wednesday.ToString("dd")
+                    </th>
+                    <th class="text-center">
+                        @thursday.ToString("ddd") @thursday.ToString("dd")
+                    </th>
+                    <th class="text-center">
+                        @friday.ToString("ddd") @friday.ToString("dd")
+                    </th>
+                    <th class="text-center">
+                        @saturday.ToString("ddd") @saturday.ToString("dd")
+                    </th>
+                </tr>
+                <tr>
+                    @foreach (var shifts in Model.ShiftsWeekly)
+                    {
+                        <td>
+                            @foreach (var shift in shifts.ShiftsDaily)
+                            {
+                                <button class="shiftSelect" value="@shift.Id" onclick="shiftSelect(this.val)">
+                                    @shift.ShiftStart.ToString("H:mm")
+                                    <text> - </text>
+                                    @shift.ShiftEnd.ToString("H:mm")
+                                    <br />
+                                </button>
+                            }
+                        </td>
+                    }
+                </tr>
+            </table>
         </div>
+
+        @*@Html.LabelFor(m => m.ShiftList, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.DropDownList("Shift", Model.ShiftList, "Select a shift", htmlAttributes: new { @id = "shift-ddl", @class = "form-control", @onchange = "" })
+                @Html.ValidationMessageFor(model => model.ShiftList, "", new { @class = "text-danger" })
+            </div>*@
+        <div id="tasklist-edit-partial" class="col-md-6"></div>
     </div>
 
-    <div id="schedule-edit-partial"></div>
 </dl>
 
 @section Scripts {

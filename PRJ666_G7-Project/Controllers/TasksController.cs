@@ -22,16 +22,12 @@ namespace PRJ666_G7_Project.Controllers
         {
             TaskIndexViewModel viewModel = new TaskIndexViewModel();
             viewModel.TaskList = db.Tasks.Include("Employee").ToList().OrderBy(x=> x.Deadline);
-            //var employees = m.EmpGetAll();
 
-            //foreach (var employee in employees)
-            //{
-            //    Employee
-            //}
             List<EmployeeBaseViewModel> emplList = new List<EmployeeBaseViewModel>();
             emplList.Add(new EmployeeBaseViewModel() { FullName = "Not Selected", UserName="" });
             emplList.AddRange(m.EmpGetAll());
             viewModel.EmployeeList = emplList;
+
             return View(viewModel);
         }
 

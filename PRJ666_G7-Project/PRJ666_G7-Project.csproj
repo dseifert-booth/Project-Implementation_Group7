@@ -178,9 +178,11 @@
     <Compile Include="Controllers\LoadDataController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\Manager.cs" />
+    <Compile Include="Controllers\NotificationsController.cs" />
     <Compile Include="Controllers\ShiftsController.cs" />
     <Compile Include="Controllers\TasksController.cs" />
     <Compile Include="Data\Employee.cs" />
+    <Compile Include="Data\Notification.cs" />
     <Compile Include="Data\RoleClaim.cs" />
     <Compile Include="Data\Shift.cs" />
     <Compile Include="Data\Task.cs" />
@@ -307,11 +309,24 @@
     <Compile Include="Migrations\202304052014251_taskUpdate2.Designer.cs">
       <DependentUpon>202304052014251_taskUpdate2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202304060930314_notifications.cs" />
+    <Compile Include="Migrations\202304060930314_notifications.Designer.cs">
+      <DependentUpon>202304060930314_notifications.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202304060931066_notifications1.cs" />
+    <Compile Include="Migrations\202304060931066_notifications1.Designer.cs">
+      <DependentUpon>202304060931066_notifications1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202304060938362_notifications2.cs" />
+    <Compile Include="Migrations\202304060938362_notifications2.Designer.cs">
+      <DependentUpon>202304060938362_notifications2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\EmployeeViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\NotificationViewModels.cs" />
     <Compile Include="Models\ShiftViewModels.cs" />
     <Compile Include="Models\TaskViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -390,7 +405,9 @@
     <Content Include="Views\Shifts\Delete.cshtml" />
     <Content Include="Views\Employees\Index.cshtml" />
     <Content Include="Views\Employees\Schedule.cshtml" />
-    <Content Include="Views\Employees\_ScheduleEdit.cshtml" />
+    <Content Include="Views\Employees\_TaskListEdit.cshtml" />
+    <Content Include="Views\Notifications\Index.cshtml" />
+    <Content Include="Views\Notifications\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -491,6 +508,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202304052014251_taskUpdate2.resx">
       <DependentUpon>202304052014251_taskUpdate2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202304060930314_notifications.resx">
+      <DependentUpon>202304060930314_notifications.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202304060931066_notifications1.resx">
+      <DependentUpon>202304060931066_notifications1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202304060938362_notifications2.resx">
+      <DependentUpon>202304060938362_notifications2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

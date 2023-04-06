@@ -1,0 +1,27 @@
+﻿@model IEnumerable<PRJ666_G7_Project.Models.NotificationBaseViewModel>
+
+@{
+    ViewBag.Title = "My Notifications";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<table class="table">
+    @foreach (var item in Model)
+    {
+        <tr>
+            <div class="col-md-6 well">
+                <h4>
+                    @item.IssueDateTime.ToString("MMM dd, yyyy")
+                </h4>
+                @Html.DisplayFor(modelItem => item.Description)
+            </div>
+        </tr>
+    }
+
+</table>
+
+@if (!User.IsInRole("Employee") && User.Identity.IsAuthenticated)
+{
+    @Html.ActionLink("Create a Notification", "Create", "Notifications")
+}

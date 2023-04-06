@@ -34,8 +34,24 @@ namespace PRJ666_G7_Project.Models
     public class TaskIndexViewModel
     {
         public IEnumerable<Task>TaskList { get; set; }
+
         public IEnumerable<EmployeeBaseViewModel> EmployeeList { get; set; }
     }
+
+    public class TaskIndexEditFormViewModel
+    {
+        public IEnumerable<Task> TaskList { get; set; }
+
+        public IEnumerable<int> TaskIds { get; set; }
+    }
+
+    public class TaskIndexEditViewModel
+    {
+        public IEnumerable<Task> TaskList { get; set; }
+
+        public IEnumerable<int> TaskIds { get; set; }
+    }
+
     public class TaskAddFormViewModel
     {
         [Display(Name = "Task name")]
