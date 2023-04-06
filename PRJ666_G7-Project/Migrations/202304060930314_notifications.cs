@@ -10,8 +10,8 @@ namespace PRJ666_G7_Project.Migrations
             DropForeignKey("dbo.Notifications", "Employee_Id", "dbo.Employees");
             DropIndex("dbo.Notifications", new[] { "Employee_Id" });
             DropTable("dbo.Notifications");
-            
-            
+
+
         }
         
         public override void Down()

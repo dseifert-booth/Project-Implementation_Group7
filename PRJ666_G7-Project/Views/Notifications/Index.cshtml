@@ -10,7 +10,7 @@
     @foreach (var item in Model)
     {
         <tr>
-            <div class="col-md-6 well">
+            <div class="col-md-6 well notificationblockcss">
                 <h4>
                     @item.IssueDateTime.ToString("MMM dd, yyyy")
                 </h4>
@@ -23,5 +23,7 @@
 
 @if (!User.IsInRole("Employee") && User.Identity.IsAuthenticated)
 {
-    @Html.ActionLink("Create a Notification", "Create", "Notifications")
+    <div class="createnewnotification">
+        @Html.ActionLink("Create a Notification", "Create", "Notifications")
+    </div>
 }
