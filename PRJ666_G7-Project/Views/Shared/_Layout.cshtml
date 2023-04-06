@@ -34,12 +34,19 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navigationText">
+
                     <li>@Html.ActionLink("My Schedule", "Schedule", "Employees", new { username = User.Identity.Name }, null)</li>
-                    <li>@Html.ActionLink("Manage Schedule", "Index", "Shifts")</li>
-                    <li>@Html.ActionLink("Manage Tasks", "Index", "Tasks")</li>
+                    @if (!User.IsInRole("Employee"))
+                    {
+                        <li>@Html.ActionLink("Manage Schedule", "Index", "Shifts")</li>
+                    }
+                    @if (!User.IsInRole("Employee"))
+                    {
+                        <li>@Html.ActionLink("Manage Tasks", "Index", "Tasks")</li>
+                    }
                     <li>@Html.ActionLink("My Organization", "Index", "Employees")</li>
                     <li>@Html.ActionLink("Notifications", "Index", "Home")</li>
-                </ul>
+                    </ul>
                 @Html.Partial("_LoginPartial")
             </div>
         </div>

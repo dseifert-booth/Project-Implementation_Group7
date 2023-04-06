@@ -14,9 +14,9 @@
 
 <h2>@ViewBag.Title</h2>
 
-<p>
+@*<p>
     @Html.ActionLink("Create New", "Create")
-</p>
+</p>*@
 <table id="overrideBS" class="table text-center table-bordered table-striped" >
     <tr >   
         <th class="text-center">
@@ -57,20 +57,21 @@
 
     @foreach (var shifts in item.ShiftsWeekly)
         {
-            <td>
-                @*<span>@Html.ActionLink("+", "Edit", new { id = item.Id }) </span> <br />*@
-                <button type="button" class="btn addshiftbtn" data-toggle="modal" data-target="#AddShiftModal" data-id="@item.UserName" data-shiftday="@shifts.ShiftsDate" name="">+</button>
-                
-                @foreach (var shift in shifts.ShiftsDaily)
-                    {
-                            <a hreff="#" class="edditShiftbtn" data-toggle="modal" data-target="#AddShiftModal" data-shiftday="@shifts.ShiftsDate" data-shiftStartDateTime="@shift.ShiftStart" data-shiftEndDateTime="@shift.ShiftEnd" data-shiftId="@shift.Id">
-                            @shift.ShiftStart.ToString("H:mm")
-                            <text> - </text>
-                            @shift.ShiftEnd.ToString("H:mm tt")
-                            </a>
-                    <br >
-                    }
-            </td>
+<td>
+    @*<span>@Html.ActionLink("+", "Edit", new { id = item.Id }) </span> <br />*@
+    <button type="button" class="btn addshiftbtn" data-toggle="modal" data-target="#AddShiftModal" data-id="@item.UserName" data-shiftday="@shifts.ShiftsDate" name=""><b>+</b></button>
+    <br />
+    <br />
+    @foreach (var shift in shifts.ShiftsDaily)
+    {
+        <a hreff="#" class="edditShiftbtn" data-toggle="modal" data-target="#AddShiftModal" data-shiftday="@shifts.ShiftsDate" data-shiftStartDateTime="@shift.ShiftStart" data-shiftEndDateTime="@shift.ShiftEnd" data-shiftId="@shift.Id">
+            @shift.ShiftStart.ToString("hh:mm tt")
+            <text> - </text>
+            @shift.ShiftEnd.ToString("hh:mm tt")
+        </a>
+        <br />
+    }
+</td>
         }
 
 
@@ -92,18 +93,20 @@
                 </div>
                 <div class="modal-body">
 
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend" id="button-addon3">
-                            <button class="btn btn-outline-secondary prefillShiftBtn" type="button" data-from="08" data-to="16">8am - 4pm</button>
-                            <button class="btn btn-outline-secondary prefillShiftBtn" type="button" data-from="09" data-to="17">9am - 5pm</button>
-                            <button class="btn btn-outline-secondary prefillShiftBtn" type="button" data-from="10" data-to="18">10am - 6pm</button>
+                    <div class="input-group mb-3 buttongroup">
+                        <div class="input-group-prepend shiftTimebtns" id="button-addon3">
+                            <button class="btn btn-outline-secondary prefillShiftBtn actionBtn" type="button" data-from="08" data-to="16">8am - 4pm</button>
+                            <button class="btn btn-outline-secondary prefillShiftBtn actionBtn" type="button" data-from="09" data-to="17">9am - 5pm</button>
+                            <button class="btn btn-outline-secondary prefillShiftBtn actionBtn" type="button" data-from="10" data-to="18">10am - 6pm</button>
                         </div>
                     </div>
-                    <div class="row">
+                    <br />
+                    <div >
                         <div class='col-sm-6'>
+                            <br />
                             <div class="form-group">
                                 <div class='input-group date'>
-                                    <input type='datetime-local' class="form-control" id='ShiftStartNewDraft' name='ShiftStartNewDraft' />
+                                    <input type='datetime-local' class="form-control shiftstartbox" id='ShiftStartNewDraft' name='ShiftStartNewDraft' />
 
                                 </div>
                             </div>
@@ -111,9 +114,10 @@
 
                     </div>
                     <div class='col-sm-6'>
+                        <br />
                         <div class="form-group">
                             <div class='input-group date'>
-                                <input type='datetime-local' class="form-control" id='ShiftEndNewDraft' name='ShiftEndNewDraft' />
+                                <input type='datetime-local' class="form-control shiftendbox" id='ShiftEndNewDraft' name='ShiftEndNewDraft' />
 
                             </div>
                         </div>
@@ -124,15 +128,15 @@
                     <input type="hidden" name="ShiftEnd" id="ShiftEnd" value="something" />
                     <input type="hidden" name="Id" id="Id" value="" />
                     @*<input type="hidden" name="TaskIds" value="1" />*@
-                    @Html.AntiForgeryToken();
+                    @Html.AntiForgeryToken()
 
                     <div class="modal-footer">
                         <div>
+                            <button type="button" class="btn btn-secondary deleteshiftbtn" data-dismiss="modal">Delete</button>
                             <button type="submit" class="btn btn-primary">Save</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        </div>
-                        <div>
-                            <button type="button" class="btn btn-secondary deleteshiftbtn" data-dismiss="modal">Delete</button>
+
+
                         </div>
                     </div>
                 </div>
@@ -159,7 +163,7 @@
 
             //add mode
             $('#shiftEditForm').attr("action", "/Shifts/create");
-
+            $('.deleteshiftbtn').css('display', 'none');
             my_id_value = $(this).data('id');
             my_shiftday = $(this).data('shiftday');
             my_shiftid = $(this).data('shiftid');
@@ -212,7 +216,7 @@
             // edit mode
 
             $('#shiftEditForm').attr("action", "/Shifts/edit");
-
+            $('.deleteshiftbtn').css('display', 'inline-block');
             my_shiftStartDateTime = new Date($(this).attr("data-shiftStartDateTime"));
             my_shiftEndDateTime = new Date($(this).attr("data-shiftEndDateTime"));
             my_shiftId = $(this).attr("data-shiftId");

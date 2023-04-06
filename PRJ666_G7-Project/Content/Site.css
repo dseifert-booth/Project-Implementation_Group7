@@ -33,22 +33,49 @@ textarea {
 .modal-footer{
     align-content:center;
 }
-.RadioButt {
-    background-color:aqua;
-}
-.addshiftbtn{
-    color: red;
+.addshiftbtn {
+    background-color: #136c0399;
+    padding: 0px 6px;
 }
 .navigationText {
     color: green;
     
 }
 .outdatedtasks{
-    background-color: #fff2f2
+    background-color: #fff2f2;
 }
 .normalduetasks {
-    background-color: #effeee
+    background-color: #effeee;
 }
 .taskduetoday {
-    background-color: #ffffee
+    background-color: #ffffee;
 }
+.edditShiftbtn{
+    color: #0b6b1f;
+    
+
+    
+}
+.table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
+    background-color: #effeee;
+}
+.shiftstartbox {
+    margin: 0 60px 10px 22px;
+    background-color: #effeee;
+}
+.shiftendbox {
+    margin: 0 60px 10px 25px;
+    background-color: #effeee;
+}
+.buttongroup {
+    width: 100%;
+    text-align: center;
+}
+
+.actionBtn {
+    margin: 0px 30px;
+    background-color: #effeee;
+    border: solid black;
+    border-radius: 1px;
+}
+

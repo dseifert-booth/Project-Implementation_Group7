@@ -17,6 +17,7 @@ namespace PRJ666_G7_Project.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
         private Manager m = new Manager();
         // GET: Tasks
+        [Authorize(Roles = "Manager,Administrator,Super Admin")]
         public ActionResult Index()
         {
             TaskIndexViewModel viewModel = new TaskIndexViewModel();

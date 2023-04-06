@@ -18,6 +18,7 @@ namespace PRJ666_G7_Project.Controllers
         private Manager m = new Manager();
 
         // GET: Shifts
+        [Authorize(Roles = "Manager,Administrator,Super Admin")]
         public ActionResult Index()
         {
             
@@ -43,7 +44,7 @@ namespace PRJ666_G7_Project.Controllers
                             shiftsDaily.Add(shift);
                         }
                     }
-                    sd.ShiftsDaily = shiftsDaily;
+                    sd.ShiftsDaily = shiftsDaily.OrderBy(x=>x.ShiftStart).ToList();
                     employee.ShiftsWeekly.Add(sd);
                 }              
             }
