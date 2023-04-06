@@ -394,6 +394,7 @@
     <Content Include="Views\Employees\Schedule.cshtml" />
     <Content Include="Views\Employees\_ScheduleEdit.cshtml" />
     <Content Include="Views\Notifications\Index.cshtml" />
+    <Content Include="Views\Employees\_TaskListEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
