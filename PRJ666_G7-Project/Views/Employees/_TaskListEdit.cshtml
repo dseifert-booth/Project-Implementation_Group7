@@ -25,7 +25,7 @@
                         @Html.DisplayFor(modelItem => item.Deadline)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Complete)
+                        @Html.CheckBoxFor(modelItem => item.Complete)
                     </td>
                     <td>
                         <a hreff="#" class="editTaskbtn" data-toggle="modal" data-target="#AddTaskModal" data-taskid="@item.Id" data-taskDesc="@item.Description" data-taskDeadline="@item.Deadline" data-taskUsername="@(item.Employee?.UserName)" data-taskName="@item.Name" data-taskCompleted="@item.Complete">Edit</a>

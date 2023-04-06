@@ -94,7 +94,7 @@ namespace PRJ666_G7_Project.Controllers
         }
 
         // GET: Employees/{username}?shiftId={shiftId}&inOut={inOut}
-        [Route("Employees/{username}/{shiftId}/{inOut}")]
+        /*[Route("Employees/{username}/{shiftId}/{inOut}")]
         public ActionResult ClockInOut(string username, int shiftId, bool inOut)
         {
             if (!ModelState.IsValid) 
@@ -105,6 +105,6 @@ namespace PRJ666_G7_Project.Controllers
             m.ShiftClockInOut(m.ShiftGetByIdWithDetail(shiftId), inOut);
 
             return RedirectToAction("Schedule", new { username = username, shiftId = shiftId });
-        }
+        }*/
     }
 }
