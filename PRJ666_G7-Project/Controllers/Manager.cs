@@ -53,16 +53,18 @@ namespace PRJ666_G7_Project.Controllers
             // Configure the AutoMapper components
             var config = new MapperConfiguration(cfg =>
             {
-            // Define the mappings below, for example...
-            // cfg.CreateMap<SourceType, DestinationType>();
-            // cfg.CreateMap<Product, ProductBaseViewModel>();
+                // Define the mappings below, for example...
+                // cfg.CreateMap<SourceType, DestinationType>();
+                // cfg.CreateMap<Product, ProductBaseViewModel>();
 
-            // Object mapper definitions
+                // Object mapper definitions
 
-            cfg.CreateMap<Models.RegisterViewModel, Models.RegisterViewModelForm>();
+                cfg.CreateMap<Models.RegisterViewModel, Models.RegisterViewModelForm>();
 
                 cfg.CreateMap<Employee, EmployeeBaseViewModel>();
                 cfg.CreateMap<Employee, EmployeeScheduleViewModel>();
+
+                cfg.CreateMap<EmployeeScheduleViewModel, Shift>();
 
                 cfg.CreateMap<Shift, ShiftBaseViewModel>();
                 cfg.CreateMap<Shift, ShiftWithDetailViewModel>();
@@ -73,8 +75,10 @@ namespace PRJ666_G7_Project.Controllers
                 cfg.CreateMap<Task, TaskBaseViewModel>();
                 cfg.CreateMap<Task, TaskWithDetailViewModel>();
                 cfg.CreateMap<TaskAddViewModel, Task>();
+                cfg.CreateMap<Task, TaskIndexViewModel>();
 
                 cfg.CreateMap<Notification, NotificationBaseViewModel>();
+                cfg.CreateMap<NotificationAddViewModel, Notification>();
             });
 
             mapper = config.CreateMapper();
@@ -99,7 +103,7 @@ namespace PRJ666_G7_Project.Controllers
         #region Use Case Methods
 
         // Check to see if this can be removed (it should be able to)
-        public IEnumerable<ApplicationUser> EmployeesGetAll() 
+        public IEnumerable<ApplicationUser> EmployeesGetAll()
         {
             return ds.Users.Where(emp => emp.Claims.Any(c => c.ClaimType == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role" && c.ClaimValue == "Employee"))
                            .OrderBy(emp => emp.FullName).AsEnumerable();
@@ -110,11 +114,30 @@ namespace PRJ666_G7_Project.Controllers
             return mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeBaseViewModel>>(ds.Employees);
         }
 
+        public IEnumerable<EmployeeScheduleViewModel> EmpGetAllWithShift()
+        {
+            var emp = ds.Employees.Include("Shifts").OrderBy(t => t.UserName);
+            return mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeScheduleViewModel>>(emp);
+        }
+
+        public EmployeeScheduleViewModel GetEmployeeScheduleByUserNameWithShift(string userName)
+        {
+            var obj = ds.Employees.Include("Shifts").SingleOrDefault(e => e.UserName == userName);
+
+            return mapper.Map<Employee, EmployeeScheduleViewModel>(obj);
+        }
+
         public EmployeeBaseViewModel EmpGetByUserName(string userName)
         {
             var obj = ds.Employees.SingleOrDefault(e => e.UserName == userName);
 
             return mapper.Map<Employee, EmployeeBaseViewModel>(obj);
+        }
+        public Employee EmpGetByUserNameEmp(string userName)
+        {
+            var obj = ds.Employees.SingleOrDefault(e => e.UserName == userName);
+
+            return obj;
         }
 
         public EmployeeScheduleViewModel GetEmployeeScheduleByUserName(string userName)
@@ -124,47 +147,24 @@ namespace PRJ666_G7_Project.Controllers
             return schedule;
         }
 
-        public EmployeeScheduleViewModel EmployeeScheduleEdit(EmployeeScheduleEditViewModel schedule, string userName)
+        public EmployeeScheduleViewModel EmployeeTasksEdit(IEnumerable<Task> tasks, string userName)
         {
-            var obj = ds.Shifts.Include("Employees").Include("Tasks").SingleOrDefault(a => a.Id == schedule.ShiftId);
+            var obj = ds.Tasks.Where(e => e.Employee.UserName == userName);
 
-            bool found;
-            foreach (var task in obj.Tasks)
+            foreach(var dsTask in obj)
             {
-                found = false;
-                if (schedule.TaskIds != null)
+                foreach(var task in tasks)
                 {
-                    foreach (var taskId in schedule.TaskIds) if (task.Id == taskId)
-                        {
-                            task.Complete = true;
-                            found = true;
-                        }
+                    if (dsTask.Id == task.Id)
+                    {
+                        dsTask.Complete = task.Complete;
+                    }
                 }
-                if (!found) task.Complete = false;
             }
-
-            obj.ClockInTime = schedule.ClockInTime;
-            obj.ClockOutTime = schedule.ClockOutTime;
 
             ds.SaveChanges();
 
             return GetEmployeeScheduleByUserName(userName);
-
-        }
-
-        public void ShiftClockInOut(ShiftWithDetailViewModel shift, bool inOut)
-        {
-            var obj = ds.Shifts.Include("Employees").Include("Tasks").SingleOrDefault(a => a.Id == shift.Id);
-            
-            if (inOut)
-            {
-                obj.ClockInTime = DateTime.Now;
-            } else
-            {
-                obj.ClockOutTime = DateTime.Now;
-            }
-
-            ds.SaveChanges();
         }
 
         public void EmployeeAdd(Employee newUser)
@@ -204,20 +204,20 @@ namespace PRJ666_G7_Project.Controllers
             }
             obj = obj.Distinct().ToHashSet();
 
-            return mapper.Map< IEnumerable<Shift>, IEnumerable<ShiftWithDetailViewModel>>(obj);
+            return mapper.Map<IEnumerable<Shift>, IEnumerable<ShiftWithDetailViewModel>>(obj);
         }
 
         public ShiftWithDetailViewModel ShiftAdd(ShiftAddViewModel newShift)
         {
 
-            ICollection<Task> tasks = new HashSet<Task>();
+            //ICollection<Task> tasks = new HashSet<Task>();
             ICollection<Employee> employees = new HashSet<Employee>();
 
-            foreach (var taskId in newShift.TaskIds)
-            {
-                var task = ds.Tasks.Find(taskId);
-                tasks.Add(task);
-            }
+            //foreach (var taskId in newShift.TaskIds)
+            //{
+            //    var task = ds.Tasks.Find(taskId);
+            //    tasks.Add(task);
+            //}
 
             foreach (var userName in newShift.EmployeeUserNames)
             {
@@ -232,24 +232,24 @@ namespace PRJ666_G7_Project.Controllers
                 ds.Notifications.Add(notif);
             }
 
-            if (tasks.Count == 0)
-            {
-                return null;
-            }
-            else
-            {
-                var addedItem = ds.Shifts.Add(mapper.Map<ShiftAddViewModel, Shift>(newShift));
+            //if (tasks.Count == 0)
+            //{
+            //    return null;
+            //}
+            //else
+            //{
+            var addedItem = ds.Shifts.Add(mapper.Map<ShiftAddViewModel, Shift>(newShift));
 
-                addedItem.Tasks = tasks;
+            //addedItem.Tasks = tasks;
 
-                addedItem.Employees = employees;
+            addedItem.Employees = employees;
 
-                addedItem.Manager = HttpContext.Current.User.Identity.Name;
+            addedItem.Manager = HttpContext.Current.User.Identity.Name;
 
-                ds.SaveChanges();
+            ds.SaveChanges();
 
-                return (addedItem == null) ? null : mapper.Map<Shift, ShiftWithDetailViewModel>(addedItem);
-            }
+            return (addedItem == null) ? null : mapper.Map<Shift, ShiftWithDetailViewModel>(addedItem);
+            //}
         }
 
 
@@ -261,7 +261,7 @@ namespace PRJ666_G7_Project.Controllers
             var isManager = HttpContext.Current.User.IsInRole("Manager");
             var isEmployee = HttpContext.Current.User.IsInRole("Employee");
 
-            var obj = ds.Shifts.Include("Employees").Include("Tasks").SingleOrDefault(a => a.Id == shift.Id);
+            var obj = ds.Shifts.Include("Employees")/*.Include("Tasks")*/.SingleOrDefault(a => a.Id == shift.Id);
 
             if (obj == null)
             {
@@ -272,37 +272,38 @@ namespace PRJ666_G7_Project.Controllers
                 if (isSuperAdmin || isAdmin || isManager)
                 {
 
-                    ICollection<Task> tasks = new HashSet<Task>();
+                    //ICollection<Task> tasks = new HashSet<Task>();
 
-                    foreach (var taskId in shift.TaskIds)
-                    {
-                        var task = ds.Tasks.Find(taskId);
-                        tasks.Add(task);
-                    }
+                    //foreach (var taskId in shift.TaskIds)
+                    //{
+                    //    var task = ds.Tasks.Find(taskId);
+                    //    tasks.Add(task);
+                    //}
 
-                    obj.Tasks = tasks;
+                    //obj.Tasks = tasks;
 
                     if (shift.ShiftStart != null) obj.ShiftStart = (DateTime)shift.ShiftStart;
                     if (shift.ShiftEnd != null) obj.ShiftEnd = (DateTime)shift.ShiftEnd;
-                } 
+                }
                 else if (isEmployee)
                 {
-                    bool found;
-                    foreach(var task in obj.Tasks)
-                    {
-                        found = false;
-                        foreach (var taskId in shift.TaskIds) if (task.Id == taskId)
-                            {
-                                task.Complete = true;
-                                found = true;
-                            }
-                        if (!found) task.Complete = false; 
-                    }
+                    //bool found;
+                    //foreach(var task in obj.Tasks)
+                    //{
+                    //    found = false;
+                    //    foreach (var taskId in shift.TaskIds) 
+                    //        if (task.Id == taskId)
+                    //        {
+                    //            task.Complete = true;
+                    //            found = true;
+                    //        }
+                    //    if (!found) task.Complete = false; 
+                    //}
 
                     obj.ClockInTime = shift.ClockInTime;
                     obj.ClockOutTime = shift.ClockOutTime;
 
-                    
+
                 } else
                 {
                     return null;
@@ -336,9 +337,89 @@ namespace PRJ666_G7_Project.Controllers
             return mapper.Map<IEnumerable<Task>, IEnumerable<TaskBaseViewModel>>(ds.Tasks.OrderBy(a => a.Id));
         }
 
+        public IEnumerable<TaskBaseViewModel> TaskGetAllByEmp(string userName)
+        {
+            var obj = ds.Tasks.Include("Employee").Where(x => x.Employee.UserName == userName).ToList().OrderBy(x => x.Deadline);
+
+            return mapper.Map<IEnumerable<Task>, IEnumerable<TaskBaseViewModel>>(obj);
+        }
+
+        public Task TaskAdd(TaskAddViewModel newTask)
+        {         
+            Employee employee = null;
+            if (!string.IsNullOrEmpty (newTask.EmployeeUserName))
+            {
+                employee = EmpGetByUserNameEmp(newTask.EmployeeUserName);
+            }
+
+            var added = ds.Tasks.Add(mapper.Map<TaskAddViewModel, Task>(newTask));
+            if (employee != null)
+            {
+                added.Employee = employee;
+            }
+
+            ds.SaveChanges();
+
+            return (added == null) ? null : added;
+        }
+
+        public Task TaskEdit(TaskEditViewModel newTask)
+        {
+            var obj = ds.Tasks.Include("Employee").SingleOrDefault(a => a.Id == newTask.Id);
+
+            if (obj == null)
+            {
+                return null;
+            }
+            else
+            {
+                Employee employee = null;
+                if (!string.IsNullOrEmpty(newTask.EmployeeUserName))
+                {
+                    employee = EmpGetByUserNameEmp(newTask.EmployeeUserName);
+                }
+
+                //var added = ds.Tasks.Add(mapper.Map<TaskAddViewModel, Task>(newTask));
+                if (employee == null)
+                {
+                    obj.Employee = null;
+                }
+                else
+                {
+                    obj.Employee = employee;
+                }
+
+                obj.Name = newTask.Name;
+                obj.Description = newTask.Description;
+                obj.Deadline = (DateTime)newTask.Deadline;
+                obj.Complete = newTask.Complete;
+                
+
+                ds.SaveChanges();
+
+                return (obj == null) ? null : obj;
+            }
+
+            
+        }
+
         public IEnumerable<NotificationBaseViewModel> NotificationGetAllByEmp(string username)
         {
             return mapper.Map<IEnumerable<Notification>, IEnumerable<NotificationBaseViewModel>>(ds.Notifications.Where(a => a.Employee.UserName == username).OrderBy(a => a.Id));
+        }
+
+        public void NotificationAdd(NotificationAddViewModel notif)
+        {
+            IEnumerable<EmployeeBaseViewModel> employees = EmpGetAll();
+
+            foreach(var emp in employees)
+            {
+                var addedItem = ds.Notifications.Add(mapper.Map<NotificationAddViewModel, Notification>(notif));
+                addedItem.IssueDateTime = DateTime.Now;
+                addedItem.Employee = ds.Employees.Where(x => x.UserName == emp.UserName).SingleOrDefault();
+            }
+
+            ds.SaveChanges();
         }
 
         #endregion
@@ -445,199 +526,6 @@ namespace PRJ666_G7_Project.Controllers
                 done = true;
             }
 
-            // *** Genres ***
-            /*if (ds.Genres.Count() == 0)
-            {
-                // Add genres here
-                ds.Genres.Add(new Genre { Name = "Alternative" });
-                ds.Genres.Add(new Genre { Name = "Classical" });
-                ds.Genres.Add(new Genre { Name = "Country" });
-                ds.Genres.Add(new Genre { Name = "Easy Listening" });
-                ds.Genres.Add(new Genre { Name = "Hip-Hop/Rap" });
-                ds.Genres.Add(new Genre { Name = "Jazz" });
-                ds.Genres.Add(new Genre { Name = "Pop" });
-                ds.Genres.Add(new Genre { Name = "R&B" });
-                ds.Genres.Add(new Genre { Name = "Rock" });
-                ds.Genres.Add(new Genre { Name = "Soundtrack" });
-
-                ds.SaveChanges();
-                done = true;
-            }*/
-
-            // *** Artists ***
-            /*if (ds.Artists.Count() == 0)
-            {
-                // Add artists here
-
-                ds.Artists.Add(new Artist
-                {
-                    Name = "The Beatles",
-                    BirthOrStartDate = new DateTime(1962, 8, 15),
-                    Executive = user,
-                    Genre = "Pop",
-                    UrlArtist = "https://upload.wikimedia.org/wikipedia/commons/9/9f/Beatles_ad_1965_just_the_beatles_crop.jpg"
-                });
-
-                ds.Artists.Add(new Artist
-                {
-                    Name = "Adele",
-                    BirthName = "Adele Adkins",
-                    BirthOrStartDate = new DateTime(1988, 5, 5),
-                    Executive = user,
-                    Genre = "Pop",
-                    UrlArtist = "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Adele_2016.jpg/800px-Adele_2016.jpg"
-                });
-
-                ds.Artists.Add(new Artist
-                {
-                    Name = "Bryan Adams",
-                    BirthOrStartDate = new DateTime(1959, 11, 5),
-                    Executive = user,
-                    Genre = "Rock",
-                    UrlArtist = "https://upload.wikimedia.org/wikipedia/commons/7/7e/Bryan_Adams_Hamburg_MG_0631_flickr.jpg"
-                });
-
-                ds.SaveChanges();
-                done = true;
-            }*/
-
-            // *** Albums ***
-            /*if (ds.Albums.Count() == 0)
-            {
-                // Add albums here
-
-                // For "Bryan Adams"
-                var bryan = ds.Artists.SingleOrDefault(a => a.Name == "Bryan Adams");
-
-                ds.Albums.Add(new Album
-                {
-                    Artists = new List<Artist> { bryan },
-                    Name = "Reckless",
-                    ReleaseDate = new DateTime(1984, 11, 5),
-                    Coordinator = user,
-                    Genre = "Rock",
-                    UrlAlbum = "https://upload.wikimedia.org/wikipedia/en/5/56/Bryan_Adams_-_Reckless.jpg"
-                });
-
-                ds.Albums.Add(new Album
-                {
-                    Artists = new List<Artist> { bryan },
-                    Name = "So Far So Good",
-                    ReleaseDate = new DateTime(1993, 11, 2),
-                    Coordinator = user,
-                    Genre = "Rock",
-                    UrlAlbum = "https://upload.wikimedia.org/wikipedia/pt/a/ab/So_Far_so_Good_capa.jpg"
-                });
-
-                ds.SaveChanges();
-                done = true;
-            }*/
-
-            // *** Tracks ***
-            /*if (ds.Tracks.Count() == 0)
-            {
-                // Add tracks
-
-                // For "Reckless"
-                var reck = ds.Albums.SingleOrDefault(a => a.Name == "Reckless");
-
-                ds.Tracks.Add(new Track
-                {
-                    Albums = new List<Album> { reck },
-                    Name = "Run To You",
-                    Composers = "Bryan Adams, Jim Vallance",
-                    Clerk = user,
-                    Genre = "Rock"
-                });
-
-                ds.Tracks.Add(new Track
-                {
-                    Albums = new List<Album> { reck },
-                    Name = "Heaven",
-                    Composers = "Bryan Adams, Jim Vallance",
-                    Clerk = user,
-                    Genre = "Rock"
-                });
-
-                ds.Tracks.Add(new Track
-                {
-                    Albums = new List<Album> { reck },
-                    Name = "Somebody",
-                    Composers = "Bryan Adams, Jim Vallance",
-                    Clerk = user,
-                    Genre = "Rock"
-                });
-
-                ds.Tracks.Add(new Track
-                {
-                    Albums = new List<Album> { reck },
-                    Name = "Summer of '69",
-                    Composers = "Bryan Adams, Jim Vallance",
-                    Clerk = user,
-                    Genre = "Rock"
-                });
-
-                ds.Tracks.Add(new Track
-                {
-                    Albums = new List<Album> { reck },
-                    Name = "Kids Wanna Rock",
-                    Composers = "Bryan Adams, Jim Vallance",
-                    Clerk = user,
-                    Genre = "Rock"
-                });
-
-                // For "So Far So Good"
-                var so = ds.Albums.SingleOrDefault(a => a.Name == "So Far So Good");
-
-                ds.Tracks.Add(new Track
-                {
-                    Albums = new List<Album> { so },
-                    Name = "Straight from the Heart",
-                    Composers = "Bryan Adams, Eric Kagna",
-                    Clerk = user,
-                    Genre = "Rock"
-                });
-
-                ds.Tracks.Add(new Track
-                {
-                    Albums = new List<Album> { so },
-                    Name = "It's Only Love",
-                    Composers = "Bryan Adams, Jim Vallance",
-                    Clerk = user,
-                    Genre = "Rock"
-                });
-
-                ds.Tracks.Add(new Track
-                {
-                    Albums = new List<Album> { so },
-                    Name = "This Time",
-                    Composers = "Bryan Adams, Jim Vallance",
-                    Clerk = user,
-                    Genre = "Rock"
-                });
-
-                ds.Tracks.Add(new Track
-                {
-                    Albums = new List<Album> { so },
-                    Name = "(Everything I Do) I Do It for You",
-                    Composers = "Bryan Adams, Jim Vallance",
-                    Clerk = user,
-                    Genre = "Rock"
-                });
-
-                ds.Tracks.Add(new Track
-                {
-                    Albums = new List<Album> { so },
-                    Name = "Heat of the Night",
-                    Composers = "Bryan Adams, Jim Vallance",
-                    Clerk = user,
-                    Genre = "Rock"
-                });
-
-                ds.SaveChanges();
-                done = true;
-            }*/
-
             return done;
         }
 
@@ -664,30 +552,6 @@ namespace PRJ666_G7_Project.Controllers
                 ds.SaveChanges();*/
 
                 /*foreach (var e in ds.Employees)
-                {
-                    ds.Entry(e).State = System.Data.Entity.EntityState.Deleted;
-                }
-                ds.SaveChanges();*/
-
-                /*foreach (var e in ds.Tracks)
-                {
-                    ds.Entry(e).State = System.Data.Entity.EntityState.Deleted;
-                }
-                ds.SaveChanges();*/
-
-                /*foreach (var e in ds.Albums)
-                {
-                    ds.Entry(e).State = System.Data.Entity.EntityState.Deleted;
-                }
-                ds.SaveChanges();*/
-
-                /*foreach (var e in ds.Artists)
-                {
-                    ds.Entry(e).State = System.Data.Entity.EntityState.Deleted;
-                }
-                ds.SaveChanges();*/
-
-                /*foreach (var e in ds.Genres)
                 {
                     ds.Entry(e).State = System.Data.Entity.EntityState.Deleted;
                 }

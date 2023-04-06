@@ -8,7 +8,6 @@ namespace PRJ666_G7_Project.Data
 {
     public class Employee
     {
-
         public Employee()
         {
             Shifts = new HashSet<Shift>();
@@ -27,5 +26,6 @@ namespace PRJ666_G7_Project.Data
         public ICollection<Shift> Shifts { get; set; }
 
         public ICollection<Notification> Notifications { get; set; }
+
     }
 }

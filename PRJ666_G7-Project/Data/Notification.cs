@@ -8,7 +8,6 @@ namespace PRJ666_G7_Project.Data
 {
     public class Notification
     {
-
         [Key]
         public int Id { get; set; }
 

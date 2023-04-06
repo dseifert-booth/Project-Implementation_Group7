@@ -18,10 +18,38 @@ namespace PRJ666_G7_Project.Controllers
         private Manager m = new Manager();
 
         // GET: Shifts
+        [Authorize(Roles = "Manager,Administrator,Super Admin")]
         public ActionResult Index()
         {
+            
+            var sunday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Sunday); //first day of ythe week
+
+            //ViewBag.UserAuthLevel = m.EmpGetByUserName(m.User.Name).AuthLevel;
+            //return View(m.ShiftGetAll());
             ViewBag.UserAuthLevel = m.EmpGetByUserName(m.User.Name).AuthLevel;
-            return View(m.ShiftGetAll());
+            var employees = m.EmpGetAllWithShift();
+            foreach (var employee in employees)
+            {
+                employee.ShiftsWeekly = new List<EmployeeShiftsWeekly>();
+                for (int i = 0; i < 7; i++) 
+                {
+                    EmployeeShiftsWeekly sd = new EmployeeShiftsWeekly();
+                    var day = sunday.AddDays(i);
+                    sd.ShiftsDate = day;
+                    List<Shift> shiftsDaily = new List<Shift>();
+                    foreach (var shift in employee.Shifts)
+                    {
+                        if(shift.ShiftStart.Date == day.Date)
+                        {
+                            shiftsDaily.Add(shift);
+                        }
+                    }
+                    sd.ShiftsDaily = shiftsDaily.OrderBy(x=>x.ShiftStart).ToList();
+                    employee.ShiftsWeekly.Add(sd);
+                }              
+            }
+
+            return View(employees);
         }
 
         // GET: Shifts/Details/5
@@ -83,7 +111,7 @@ namespace PRJ666_G7_Project.Controllers
             }
             else
             {
-                return RedirectToAction("Details", "Shifts", new { id = addedItem.Id });
+                return RedirectToAction("Index", "Shifts", new { id = addedItem.Id });
             }
         }
 
@@ -134,11 +162,11 @@ namespace PRJ666_G7_Project.Controllers
 
             if (editedItem == null)
             {
-                return RedirectToAction("Edit", new { id = shift.Id });
+                return RedirectToAction("Index", new { id = shift.Id });
             }
             else
             {
-                return RedirectToAction("Details", "Shifts", new { id = shift.Id });
+                return RedirectToAction("Index", "Shifts", new { id = shift.Id });
             }
         }
 

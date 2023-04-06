@@ -1,8 +1,10 @@
-﻿using System;
+﻿using PRJ666_G7_Project.Data;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace PRJ666_G7_Project.Models
 {
@@ -18,11 +20,36 @@ namespace PRJ666_G7_Project.Models
         [StringLength(10000)]
         public string Description { get; set; }
 
+        public DateTime? Deadline { get; set; }
+
+        public  Employee Employee { get; set; }
+
     }
 
     public class TaskWithDetailViewModel
     {
 
+    }
+
+    public class TaskIndexViewModel
+    {
+        public IEnumerable<Task>TaskList { get; set; }
+
+        public IEnumerable<EmployeeBaseViewModel> EmployeeList { get; set; }
+    }
+
+    public class TaskIndexEditFormViewModel
+    {
+        public IEnumerable<Task> TaskList { get; set; }
+
+        public IEnumerable<int> TaskIds { get; set; }
+    }
+
+    public class TaskIndexEditViewModel
+    {
+        public IEnumerable<Task> TaskList { get; set; }
+
+        public IEnumerable<int> TaskIds { get; set; }
     }
 
     public class TaskAddFormViewModel
@@ -35,6 +62,10 @@ namespace PRJ666_G7_Project.Models
         [StringLength(10000)]
         public string Description { get; set; }
 
+        public string EmployeeUserName { get; set; }
+
+
+
     }
 
     public class TaskAddViewModel
@@ -44,5 +75,25 @@ namespace PRJ666_G7_Project.Models
 
         [StringLength(10000)]
         public string Description { get; set; }
+
+        public string EmployeeUserName { get; set; }
+        
+        public DateTime Deadline { get; set; }
+    }
+
+    public class TaskEditViewModel
+    {
+        [Required, StringLength(100)]
+        public string Name { get; set; }
+
+        [StringLength(10000)]
+        public string Description { get; set; }
+
+        public string EmployeeUserName { get; set; }
+        public int Id { get; set; }
+        public bool Complete { get; set; }
+        public string CompleteChbx { get; set; }
+
+        public DateTime Deadline { get; set; }
     }
 }

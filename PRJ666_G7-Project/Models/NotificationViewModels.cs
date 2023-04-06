@@ -16,4 +16,15 @@ namespace PRJ666_G7_Project.Models
 
         public string Description { get; set; }
     }
+
+    public class NotificationAddFormViewModel
+    {
+        [Display(Name = "Notification Text: ")]
+         public string Description { get; set; }
+    }
+
+    public class NotificationAddViewModel
+    {
+        public string Description { get; set; }
+    }
 }

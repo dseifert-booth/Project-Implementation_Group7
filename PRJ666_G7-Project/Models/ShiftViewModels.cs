@@ -53,7 +53,7 @@ namespace PRJ666_G7_Project.Models
         [Display(Name = "Select tasks")]
         public MultiSelectList TaskList { get; set; }
 
-        public IEnumerable<string> TaskIds { get; set; }
+        //public IEnumerable<string> TaskIds { get; set; }
     }
 
     public class ShiftAddViewModel
@@ -68,7 +68,7 @@ namespace PRJ666_G7_Project.Models
 
         public MultiSelectList TaskList { get; set; }
 
-        public IEnumerable<int> TaskIds { get; set; }
+        //public IEnumerable<int> TaskIds { get; set; }
     }
 
     public class ShiftEditFormViewModel
@@ -91,7 +91,7 @@ namespace PRJ666_G7_Project.Models
         [Display(Name = "Tasks to complete")]
         public MultiSelectList TaskList { get; set; }
 
-        public IEnumerable<string> TaskIds { get; set; }
+        //public IEnumerable<string> TaskIds { get; set; }
     }
 
     public class ShiftEditViewModel
@@ -109,6 +109,6 @@ namespace PRJ666_G7_Project.Models
 
         public MultiSelectList TaskList { get; set; }
 
-        public IEnumerable<int> TaskIds { get; set; }
+        //public IEnumerable<int> TaskIds { get; set; }
     }
 }
