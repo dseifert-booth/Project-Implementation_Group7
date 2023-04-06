@@ -1,0 +1,102 @@
+﻿@model PRJ666_G7_Project.Models.TaskIndexEditFormViewModel
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        <table class="table">
+            <tr>
+                <th>Name</th>
+                <th>Deadline:</th>
+                <th>Complete</th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model.TaskList)
+            {
+                <tr class="@(item.Deadline < DateTime.Now? "outdatedtasks": item.Deadline < DateTime.Now.AddDays(1)? "taskduetoday" : "normalduetasks")">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Deadline)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Complete)
+                    </td>
+                    <td>
+                        <a hreff="#" class="editTaskbtn" data-toggle="modal" data-target="#AddTaskModal" data-taskid="@item.Id" data-taskDesc="@item.Description" data-taskDeadline="@item.Deadline" data-taskUsername="@(item.Employee?.UserName)" data-taskName="@item.Name" data-taskCompleted="@item.Complete">Edit</a>
+                    </td>
+                </tr>
+            }
+
+        </table>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".createTaskbtn").click(function () {
+                $('#completedBlock').css('display', 'none');
+                $('#Id').val("");
+                $('#Name').val("");
+                $('#Description').val("");
+                $('#Deadline').val("");
+                $('#CompleteChbx').prop('checked', false); EmployeeUserName
+                $('#EmployeeUserName').val("");
+                $('#TaskEdditForm').attr("action", "/Tasks/Create");
+            });
+
+
+            $(".editTaskbtn").click(function () {
+                $('#TaskEdditForm').attr("action", "/Tasks/Edit");
+                let my_taskId = $(this).attr("data-taskid");
+                let my_taskCompleted = $(this).attr("data-taskCompleted");
+                let my_taskDesc = $(this).attr("data-taskDesc");
+                let my_taskDeadline = $(this).attr("data-taskDeadline");
+                let my_taskUsername = $(this).attr("data-taskUsername");
+                let my_taskName = $(this).attr("data-taskName");
+
+                $('#Name').val(my_taskName);
+                $('#Description').val(my_taskDesc);
+                $('#Deadline').val(formatDateTime(new Date(my_taskDeadline)));
+                $('#Id').val(my_taskId);
+
+                //set completed section and checkbox
+                $('#completedBlock').css('display', 'block');
+                if (my_taskCompleted == "True" || my_taskCompleted == "true") {
+                    $('#CompleteChbx').prop('checked', true);
+                }
+                else {
+                    $('#CompleteChbx').prop('checked', false);
+                }
+
+                //set employee dropdown
+                $('#EmployeeUserName').val(my_taskUsername);
+
+            });
+
+            function formatDateTime(dt) {
+                let month = "0" + (dt.getMonth() + 1);
+                let day = "0" + dt.getDate().toString();
+                let hour = "0" + dt.getHours().toString();
+                let minute = "0" + dt.getMinutes().toString();
+                let fdate = dt.getFullYear() + "-" + month.substr(month.length - 2) + "-" + day.substr(day.length - 2) + "T" + hour.substr(hour.length - 2) + ":" + minute.substr(minute.length - 2)
+                //console.log("fdate",fdate);
+                return fdate;
+            };
+        });
+    </script>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

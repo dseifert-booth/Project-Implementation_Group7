@@ -1,17 +1,14 @@
 ﻿@model PRJ666_G7_Project.Models.TaskIndexViewModel
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Task List";
 }
 
-<h2>Index</h2>
+<h2>@ViewBag.Title</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<a hreff="#" class="createTaskbtn" data-toggle="modal" data-target="#AddTaskModal">
-    Create New
-</a>
 
 <form method="post" action="/Tasks/Create" id="TaskEdditForm">
     <div id="AddTaskModal" class="modal" tabindex="-1" role="dialog">

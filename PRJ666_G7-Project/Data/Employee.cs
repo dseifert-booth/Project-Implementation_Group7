@@ -8,6 +8,11 @@ namespace PRJ666_G7_Project.Data
 {
     public class Employee
     {
+        public Employee()
+        {
+            Shifts = new HashSet<Shift>();
+            Notifications = new HashSet<Notification>();
+        }
 
         [Key]
         public int Id { get; set; }
@@ -19,6 +24,8 @@ namespace PRJ666_G7_Project.Data
         public int AuthLevel { get; set; }
 
         public ICollection<Shift> Shifts { get; set; }
+
+        public ICollection<Notification> Notifications { get; set; }
 
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using PRJ666_G7_Project.Data;
 using PRJ666_G7_Project.Models;
 
 namespace PRJ666_G7_Project.Controllers
@@ -10,6 +11,7 @@ namespace PRJ666_G7_Project.Controllers
     [Authorize]
     public class EmployeesController : Controller
     {
+        private ApplicationDbContext db = new ApplicationDbContext();
         Manager m = new Manager();
 
         // GET: Employees
@@ -25,60 +27,68 @@ namespace PRJ666_G7_Project.Controllers
         {
             ViewBag.UserAuthLevel = m.EmpGetByUserName(m.User.Name).AuthLevel;
 
-            var schedule = m.GetEmployeeScheduleByUserName(userName);
+            var sunday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Sunday);
+
+            var schedule = m.GetEmployeeScheduleByUserNameWithShift(userName);
             schedule.ShiftList = new SelectList(m.ShiftGetByEmployeeUserName(userName), "Id", "ShiftStart");
+
+            schedule.ShiftsWeekly = new List<EmployeeShiftsWeekly>();
+            for (int i = 0; i < 7; i++)
+            {
+                EmployeeShiftsWeekly sd = new EmployeeShiftsWeekly();
+                var day = sunday.AddDays(i);
+                sd.ShiftsDate = day;
+                List<Shift> shiftsDaily = new List<Shift>();
+                foreach (var shift in schedule.Shifts)
+                {
+                    if (shift.ShiftStart.Date == day.Date)
+                    {
+                        shiftsDaily.Add(shift);
+                    }
+                }
+                sd.ShiftsDaily = shiftsDaily;
+                schedule.ShiftsWeekly.Add(sd);
+            }
 
             return View(schedule);
         }
 
-        // GET: Employees/{username}/{shiftId}
-        [Route("Employees/{username}/{shiftId}")]
-        public ActionResult _ScheduleEdit(int? shiftId)
+        [Route("Employees/{username}/tasklist")]
+        public ActionResult _TaskListEdit(string userName)
         {
+            TaskIndexEditFormViewModel viewModel = new TaskIndexEditFormViewModel();
+            viewModel.TaskList = db.Tasks.Include("Employee").Where(x => x.Employee.UserName == userName).ToList().OrderBy(x => x.Deadline);
 
-            if (shiftId == null)
-            {
-                return HttpNotFound();
-            }
-            else
-            {
-                var shift = m.ShiftGetByIdWithDetail((int)shiftId);
-                var formObj = m.mapper.Map<ShiftWithDetailViewModel, EmployeeScheduleEditFormViewModel>(shift);
-
-                formObj.UserName = User.Identity.Name;
-                formObj.ShiftStart = shift.ShiftStart;
-                formObj.ClockInTime = shift.ClockInTime;
-                formObj.ClockOutTime = shift.ClockOutTime;
-
-                formObj.TaskList = new MultiSelectList
-                (items: shift.Tasks,
-                dataValueField: "Id",
-                dataTextField: "Name",
-                selectedValues: shift.Tasks.Where(t => t.Complete).Select(t => t.Id)
-                );
-
-                // SelectedValues do not recieve anything, page does not show correct tasks as "Completed"
-                return PartialView(formObj);
-            }
+            return PartialView(viewModel);
         }
 
-        // POST: Employees/{username}/?shiftId={shiftId}
-        [Route("Employees/{username}/{shiftId}")]
+        // POST: Employees/{username}/tasklist
+        [Route("Employees/{username}/tasklist")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult _ScheduleEdit(string username, EmployeeScheduleEditViewModel schedule)
+        public ActionResult _TaskListEdit(string username, TaskIndexEditViewModel tasks)
         {
             if (!ModelState.IsValid)
             {
-                return RedirectToAction("Schedule", new { username = schedule.UserName });
+                return RedirectToAction("Schedule", new { username = username });
             }
 
-            if (username != schedule.UserName)
+            IEnumerable<Task> taskList = tasks.TaskList;
+
+
+            foreach(var task in taskList)
             {
-                return RedirectToAction("Schedule", new { username = schedule.UserName });
+                foreach(var taskId in tasks.TaskIds)
+                {
+                    task.Complete = false;
+                    if (task.Id == taskId)
+                    {
+                        task.Complete = true;
+                    }
+                }
             }
 
-            var editedItem = m.EmployeeScheduleEdit(schedule, username);
+            var editedItem = m.EmployeeTasksEdit(taskList, username);
 
             return RedirectToAction("Schedule", new { username = editedItem.UserName });
         }
