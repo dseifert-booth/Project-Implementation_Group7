@@ -92,5 +92,19 @@ namespace PRJ666_G7_Project.Controllers
 
             return RedirectToAction("Schedule", new { username = editedItem.UserName });
         }
+
+        // GET: Employees/{username}?shiftId={shiftId}&inOut={inOut}
+        [Route("Employees/{username}/{shiftId}/{inOut}")]
+        public ActionResult ClockInOut(string username, int shiftId, bool inOut)
+        {
+            if (!ModelState.IsValid) 
+            {
+                return RedirectToAction("Schedule", new { username = username });
+            }
+
+            m.ShiftClockInOut(m.ShiftGetByIdWithDetail(shiftId), inOut);
+
+            return RedirectToAction("Schedule", new { username = username, shiftId = shiftId });
+        }
     }
 }
