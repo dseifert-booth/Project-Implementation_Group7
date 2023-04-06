@@ -9,10 +9,7 @@ namespace PRJ666_G7_Project.Data
     public class Task
     {
 
-        public Task()
-        {
-            Shifts = new HashSet<Shift>();
-        }
+        
 
         [Key]
         public int Id { get; set; }
@@ -23,8 +20,10 @@ namespace PRJ666_G7_Project.Data
         [StringLength(10000)]
         public string Description { get; set; }
 
+        public DateTime Deadline { get; set; }
+
         public bool Complete { get; set; }
 
-        public ICollection<Shift> Shifts { get; set; }
+        public Employee Employee { get; set; }
     }
 }

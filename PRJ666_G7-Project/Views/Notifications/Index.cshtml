@@ -9,7 +9,7 @@
 <table class="table">
     @foreach (var item in Model)
     {
-        <tr >
+        <tr>
             <div class="col-md-6 well">
                 <h4>
                     @item.IssueDateTime.ToString("MMM dd, yyyy")
@@ -20,3 +20,8 @@
     }
 
 </table>
+
+@if (!User.IsInRole("Employee") && User.Identity.IsAuthenticated)
+{
+    @Html.ActionLink("Create a Notification", "Create", "Notifications")
+}

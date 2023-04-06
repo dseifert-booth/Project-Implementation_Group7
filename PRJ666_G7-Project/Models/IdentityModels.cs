@@ -39,14 +39,6 @@ namespace PRJ666_G7_Project.Models
 
         public DbSet<Notification> Notifications { get; set; }
 
-        /*public DbSet<Genre> Genres { get; set; }
-
-        public DbSet<Artist> Artists { get; set; }
-
-        public DbSet<Album> Albums { get; set; }
-
-        public DbSet<Track> Tracks { get; set; }*/
-
 
         // Turn OFF cascade delete, which is (unfortunately) the default setting
         // for Code First generated databases

@@ -15,11 +15,20 @@ namespace PRJ666_G7_Project.Controllers
     public class TasksController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-
+        private Manager m = new Manager();
         // GET: Tasks
+        [Authorize(Roles = "Manager,Administrator,Super Admin")]
         public ActionResult Index()
         {
-            return View(db.Tasks.ToList());
+            TaskIndexViewModel viewModel = new TaskIndexViewModel();
+            viewModel.TaskList = db.Tasks.Include("Employee").ToList().OrderBy(x=> x.Deadline);
+
+            List<EmployeeBaseViewModel> emplList = new List<EmployeeBaseViewModel>();
+            emplList.Add(new EmployeeBaseViewModel() { FullName = "Not Selected", UserName="" });
+            emplList.AddRange(m.EmpGetAll());
+            viewModel.EmployeeList = emplList;
+
+            return View(viewModel);
         }
 
         // GET: Tasks/Details/5
@@ -48,16 +57,34 @@ namespace PRJ666_G7_Project.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Description,Complete")] Task task)
+        public ActionResult Create( TaskAddViewModel newItem)
         {
-            if (ModelState.IsValid)
+            // Validate the input
+            if (!ModelState.IsValid)
             {
-                db.Tasks.Add(task);
-                db.SaveChanges();
+                return View(newItem);
+            }
+
+            // Process the input
+            var addedItem = m.TaskAdd(newItem);
+
+            if (addedItem == null)
+            {
+                return View(addedItem);
+            }
+            else
+            {
                 return RedirectToAction("Index");
             }
 
-            return View(task);
+            //if (ModelState.IsValid)
+            //{
+             //db.Tasks.Add(task);
+            //    db.SaveChanges();
+            //    return RedirectToAction("Index");
+            //}
+
+            //return View(task);
         }
 
         // GET: Tasks/Edit/5
@@ -80,15 +107,41 @@ namespace PRJ666_G7_Project.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Description,Complete")] Task task)
+        public ActionResult Edit(TaskEditViewModel updatedItem)
         {
-            if (ModelState.IsValid)
+            // Validate the input
+            if (!ModelState.IsValid)
             {
-                db.Entry(task).State = EntityState.Modified;
-                db.SaveChanges();
+                return View(updatedItem);
+            }
+
+            // Process the input
+            if (updatedItem.CompleteChbx == "on")
+            {
+                updatedItem.Complete = true;
+            }
+            else
+            {
+                updatedItem.Complete = false;
+            }
+
+            var addedItem = m.TaskEdit(updatedItem);
+
+            if (addedItem == null)
+            {
+                return View(updatedItem);
+            }
+            else
+            {
                 return RedirectToAction("Index");
             }
-            return View(task);
+            //if (ModelState.IsValid)
+            //{
+            //    db.Entry(task).State = EntityState.Modified;
+            //    db.SaveChanges();
+            //    return RedirectToAction("Index");
+            //}
+            //return View(task);
         }
 
         // GET: Tasks/Delete/5

@@ -53,9 +53,9 @@
                     {
                         if (item.Text != "Super Admin")
                         {
-                            <div class="radio">
+                            <div class="checkbox">
                                 <label>
-                                    <input type="radio" name="Roles" checked="@item.Selected" value="@item.Text" />@item.Text
+                                    <input type="checkbox" name="Roles" checked="@item.Selected" value="@item.Text" />@item.Text
                                 </label>
                             </div>
                         }
@@ -64,9 +64,9 @@
                     {
                         if (item.Text != "Super Admin" && item.Text != "Administrator")
                         {
-                            <div class="radio">
+                            <div class="checkbox">
                                 <label>
-                                    <input type="radio" name="Roles" checked="@item.Selected" value="@item.Text" />@item.Text
+                                    <input type="checkbox" name="Roles" checked="@item.Selected" value="@item.Text" />@item.Text
                                 </label>
                             </div>
                         }
@@ -75,9 +75,9 @@
                     {
                         if (item.Text == "Employee")
                         {
-                            <div class="radio">
+                            <div class="checkbox">
                                 <label>
-                                    <input type="radio" name="Roles" checked="@item.Selected" value="@item.Text" />@item.Text
+                                    <input type="checkbox" name="Roles" checked="@item.Selected" value="@item.Text" />@item.Text
                                 </label>
                             </div>
                         }
