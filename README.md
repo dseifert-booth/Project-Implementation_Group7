@@ -1,13 +1,9 @@
-# PRJ566 - Group 7 Tasks & Progress Report
+# PRJ666 - Group 7 Tasks & Progress Report
 
 Team:
 > Darius Seifert Booth - 109908202
 
 > Denys Syniavskyi - 110564192
-
-> Long Nguyen - 
-
-> Erfan Hemayati - 129989208
 
 # Overview 
 
